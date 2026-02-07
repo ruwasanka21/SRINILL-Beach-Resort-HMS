@@ -1,0 +1,10 @@
+{
+  "database": {
+    "host": "localhost",
+    "port": 3305,
+    "name": "srinill_beach_resort",
+    "username": "root",
+    "password": "1234",
+    "driver": "com.mysql.jdbc.Driver"
+  }
+}

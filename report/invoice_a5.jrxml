@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="monthly_bookings" language="groovy" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="474deae7-f938-4b66-812e-aac77c52381f">
+	<property name="ireport.zoom" value="2.8531167061100224"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="fromDate" class="java.lang.String"/>
+	<parameter name="toDate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="month" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bookingId" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT booking_id, customer_name, customer_tel_no, customer_address, customer_nic, booking_date, checkin_date, checkout_date, no_of_pax, child, booking_from, room_no, room_price, total_price, remark, actual_checkin, actual_checkout, checkout_subtotal, additional_charges, additional_note, discount_amount, grand_total, payment_method, cash_payment, card_payment, balance, booking_status, booking_last_update_time, booking_id FROM booking WHERE booking_id = $P{bookingId}]]>
+	</queryString>
+	<field name="booking_id" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="customer_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="customer_tel_no" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="customer_address" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="customer_nic" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="booking_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="checkin_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="checkout_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="no_of_pax" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="child" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="booking_from" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="room_no" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="room_price" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_price" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="remark" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="actual_checkin" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="actual_checkout" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="checkout_subtotal" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="additional_charges" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="additional_note" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="discount_amount" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="grand_total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="payment_method" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cash_payment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="card_payment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="balance" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="booking_status" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="booking_last_update_time" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="rowCount" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{room_price}]]></variableExpression>
+	</variable>
+	<variable name="noOfNights" class="java.lang.Integer">
+		<variableExpression><![CDATA[($F{actual_checkout}.getTime() - $F{actual_checkin}.getTime()) / (1000 * 60 * 60 * 24)]]></variableExpression>
+	</variable>
+	<variable name="grandTotal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[($F{room_price}*$V{noOfNights})]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="362" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="57" y="-4" width="275" height="34" uuid="a00baa0f-1ce8-4dc1-a801-dabd73743f66"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial Black" size="18" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[SRINILL BEACH RESORT]]></text>
+			</staticText>
+			<image scaleImage="RealSize">
+				<reportElement x="0" y="-6" width="56" height="80" uuid="4884fbe9-a28b-4c46-be11-69d8db8d2ce9"/>
+				<imageExpression><![CDATA["report\\logo.jpg"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="60" y="28" width="275" height="14" uuid="67b63eeb-5a09-4109-a65c-723c018eb365"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["No 42, Cemetery road, Negombo, Sri Lanka"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="60" y="59" width="275" height="15" uuid="5929d266-f507-4d16-86ad-115664220bec"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tel : +94 765663417 | +94 0312285343"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="59" y="43" width="275" height="15" uuid="fdfe88c5-98c9-4bb1-84f7-4767cc67a77a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Email : srinillbeachresort@gmail.com"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="83" width="381" height="1" uuid="c6ed4270-5dae-44c9-8d75-a4b03b467b78"/>
+			</line>
+			<staticText>
+				<reportElement style="Column header" mode="Opaque" x="291" y="56" width="90" height="18" forecolor="#000000" backcolor="#CCCCCC" uuid="3f399a00-03a1-4a74-afa0-3bb325d51c28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[INVOICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="87" width="56" height="15" forecolor="#000000" uuid="69158900-0b72-4904-87ae-442f3776b32a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Booking ID :]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="Detail" x="59" y="87" width="91" height="15" uuid="a2167bd3-e22e-4307-b1cc-aa6d64845cf1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{booking_id}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy-MM-dd HH:MM" isBlankWhenNull="true">
+				<reportElement style="Detail" x="291" y="87" width="90" height="15" uuid="d62ff3f0-3cd6-4ceb-b797-fd5eba4fa67f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actual_checkout}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="261" y="87" width="30" height="15" forecolor="#000000" uuid="2500e25d-598d-436b-bf14-2025d68d3965"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="Detail" x="59" y="102" width="91" height="15" uuid="a0610b69-3385-45ad-a8eb-a5212fbfc10d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="0" y="102" width="47" height="15" forecolor="#000000" uuid="cf6deb19-e5af-4783-8ffa-17174bc4838a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="47" y="102" width="9" height="15" forecolor="#000000" uuid="63b8e940-5dae-435a-87c1-c06fecba244f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="0" y="125" width="27" height="15" forecolor="#000000" uuid="b9dbc24f-8305-4e16-a0ad-ff0ba40a6f8e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="27" y="125" width="168" height="15" forecolor="#000000" uuid="9d8a1b28-bc83-40e1-a0a4-a29d37aca02e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="263" y="125" width="57" height="15" forecolor="#000000" uuid="371f30ad-6fd1-4d90-8962-4f048cbfebb7"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="195" y="125" width="68" height="15" forecolor="#000000" uuid="ec92cfae-afd6-4fc4-9f7f-6ac59909f5c4"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[No of Nights]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Transparent" x="320" y="125" width="61" height="15" forecolor="#000000" uuid="8d38a04c-098f-42f3-9b82-fce76d6b66e3"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement style="Detail" x="195" y="141" width="68" height="19" uuid="5713eb75-6ffd-40b0-9ecc-1e4be09170f6"/>
+				<box leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(int) (
+    ($F{actual_checkout}.getTime() - $F{actual_checkin}.getTime())
+    / (1000L * 60 * 60 * 24)
+)]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="263" y="141" width="57" height="19" uuid="9f44db11-2098-4e76-891b-a70c56799705"/>
+				<box leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{room_price}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="320" y="141" width="61" height="19" uuid="54ec7a20-813f-4d2c-b06a-235893e8d6f0"/>
+				<box leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.math.BigDecimal(
+    (int) (
+        ($F{actual_checkout}.getTime() - $F{actual_checkin}.getTime())
+        / (1000L * 60 * 60 * 24)
+    )
+).multiply($F{room_price})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="27" y="141" width="168" height="19" uuid="0166e4a8-2628-48f4-8537-dfd5e5ec0c74"/>
+				<box leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{room_no} == "101" ? "Deluxe Triple Room - 101" :
+$F{room_no} == "102" ? "Deluxe Double Room - 102" :
+$F{room_no} == "103" ? "Deluxe Double Room - 103" :
+$F{room_no} == "104" ? "Deluxe Double Room - 104" :
+$F{room_no} == "105" ? "Deluxe Double Room - 105" :
+$F{room_no} == "106" ? "Deluxe Double Room - 106" :
+$F{room_no} == "107" ? "Deluxe Double Room - 107" :
+$F{room_no} == "108" ? "Deluxe Double Room - 108" :
+$F{room_no} == "109" ? "Deluxe Double Room - 109" : ""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="0" y="141" width="27" height="19" uuid="03eda3d7-100c-4356-ad7c-6d7b6b646a26"/>
+				<box leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["1"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement mode="Opaque" x="0" y="125" width="1" height="237" forecolor="#666666" backcolor="#666666" uuid="7f0a20e7-dd84-4294-8f12-f337b31284d3"/>
+			</line>
+			<line>
+				<reportElement mode="Opaque" x="26" y="125" width="1" height="237" forecolor="#666666" backcolor="#666666" uuid="e01d31af-4754-4e84-bcd0-7f0dd5147ae8"/>
+			</line>
+			<line>
+				<reportElement mode="Opaque" x="263" y="125" width="1" height="237" forecolor="#666666" backcolor="#666666" uuid="a3bf9ed8-89eb-4976-bf86-503676100254"/>
+			</line>
+			<line>
+				<reportElement mode="Opaque" x="194" y="125" width="1" height="237" forecolor="#666666" backcolor="#666666" uuid="d546dfc1-cccd-40f0-bb92-f47a6fd8eec8"/>
+			</line>
+			<line>
+				<reportElement mode="Opaque" x="319" y="125" width="1" height="237" forecolor="#666666" backcolor="#666666" uuid="ec95d9fc-8226-4f87-b1a7-5b27af6482ba"/>
+			</line>
+			<line>
+				<reportElement mode="Opaque" x="380" y="125" width="1" height="237" forecolor="#666666" backcolor="#666666" uuid="d87a32c8-443a-4905-9582-b9f0ed16d466"/>
+			</line>
+			<line>
+				<reportElement mode="Opaque" x="0" y="361" width="380" height="1" forecolor="#666666" backcolor="#666666" uuid="3da60d8c-bd6d-44bf-8cad-0e6b2898ee3f"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1" y="160" width="27" height="19" uuid="8165de62-aebd-48e1-b3d5-dc5fae5d5387">
+					<printWhenExpression><![CDATA[$F{additional_charges} != BigDecimal.ZERO]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["2"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="28" y="162" width="166" height="80" uuid="16b3a29d-f20b-4636-92e5-f3bd60047816">
+					<printWhenExpression><![CDATA[$F{additional_charges} != BigDecimal.ZERO]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2" leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{additional_note}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="321" y="160" width="60" height="19" uuid="e56b0cac-7d47-405b-b854-1cd9c6722589">
+					<printWhenExpression><![CDATA[$F{additional_charges} != BigDecimal.ZERO]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="3" rightPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{additional_charges}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="8" width="381" height="1" uuid="6fed55bf-198b-4577-b9fb-27fdc672f13a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="66" y="0" width="248" height="20" uuid="f090a1d2-15ad-4d3b-a94d-f0f5b1cd9ab7"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cambria" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Thank You! Come Again."]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="85" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" mode="Opaque" x="243" y="30" width="138" height="19" forecolor="#000000" backcolor="#CCCCCC" uuid="7a858d00-7caa-4fc0-8829-9c49fa19c84b"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grand Total]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="320" y="30" width="61" height="19" uuid="fb560213-4a8f-49bc-b155-060cda36c601"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.math.BigDecimal(
+    (int) (
+        ($F{actual_checkout}.getTime() - $F{actual_checkin}.getTime())
+        / (1000L * 60 * 60 * 24)
+    )
+).multiply($F{room_price}).add($F{additional_charges}).subtract($F{discount_amount})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="320" y="0" width="61" height="15" uuid="478a0b90-89ad-4aa1-8018-89a740a0f904"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.math.BigDecimal(
+    (int) (
+        ($F{actual_checkout}.getTime() - $F{actual_checkin}.getTime())
+        / (1000L * 60 * 60 * 24)
+    )
+).multiply($F{room_price}).add($F{additional_charges})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="320" y="15" width="61" height="15" isRemoveLineWhenBlank="true" uuid="35e76ac3-683d-464d-bad5-c89e0bc79fd8">
+					<printWhenExpression><![CDATA[$F{discount_amount} != 0.00]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{discount_amount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="243" y="15" width="77" height="15" isRemoveLineWhenBlank="true" uuid="156eeb57-6cec-439c-90c7-0a21ec66d44b">
+					<printWhenExpression><![CDATA[$F{discount_amount} != 0.00]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Discount :"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="243" y="0" width="77" height="15" uuid="b070ac66-0621-4061-87b7-049144f4f716"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sub Total :"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="320" y="65" width="61" height="15" isRemoveLineWhenBlank="true" uuid="54c84fed-e310-44db-95bc-101c28797922">
+					<printWhenExpression><![CDATA[$F{card_payment} != BigDecimal.ZERO]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{card_payment}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="243" y="50" width="77" height="15" isRemoveLineWhenBlank="true" uuid="21c0f2ea-f906-4699-803e-e277127e9593">
+					<printWhenExpression><![CDATA[$F{cash_payment} != BigDecimal.ZERO]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cash :"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="243" y="65" width="77" height="15" isRemoveLineWhenBlank="true" uuid="36bd19c8-c293-4778-a00b-42ed523a5d0d">
+					<printWhenExpression><![CDATA[$F{card_payment} != BigDecimal.ZERO]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Card :"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="320" y="50" width="61" height="15" isRemoveLineWhenBlank="true" uuid="57b4f594-9598-4333-af7f-2499c13c8f0b">
+					<printWhenExpression><![CDATA[$F{cash_payment} != BigDecimal.ZERO]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cash_payment}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
