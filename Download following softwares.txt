@@ -1,0 +1,9 @@
+Download following software with versions
+
+iReport 5.6.0
+GitHub Desktop
+MySQL Server 5.6
+MySQL Workbench
+MySQL Administrator
+Java jre1.8.0_202 
+Java JDK 1.8.0_202 
