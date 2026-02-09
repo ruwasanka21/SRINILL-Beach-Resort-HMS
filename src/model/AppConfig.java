@@ -5,17 +5,19 @@
  */
 package model;
 
-import control.DatabaseLayer;
-
 /**
  *
  * @author ASUS
  */
 public class AppConfig {
 
-    private DatabaseConfig  database;
+    private DatabaseConfig database;
 
-    public DatabaseConfig  getDatabase() { return database; }
-    public void setDatabase(DatabaseConfig  database) { this.database = database; }
+    public DatabaseConfig getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(DatabaseConfig database) {
+        this.database = database;
+    }
 }
-

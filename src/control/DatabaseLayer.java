@@ -7,8 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseLayer {
+
     private static Connection connection = null;
-    
+
     public static Connection getConnection() {
 
         try {
@@ -23,7 +24,7 @@ public class DatabaseLayer {
                         + "/" + db.getName()
                         + "?useSSL=false&useUnicode=true&characterEncoding=UTF-8";
 
-                connection = DriverManager.getConnection(url,db.getUsername(),db.getPassword());
+                connection = DriverManager.getConnection(url, db.getUsername(), db.getPassword());
                 System.out.println("Database connected successfully");
             }
         } catch (ClassNotFoundException e) {

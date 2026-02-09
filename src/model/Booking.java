@@ -51,7 +51,6 @@ public class Booking {
     }
 
     // You can generate full constructor if needed
-
     public int getBookingId() {
         return bookingId;
     }
@@ -268,4 +267,3 @@ public class Booking {
         this.bookingLastUpdateTime = bookingLastUpdateTime;
     }
 }
-

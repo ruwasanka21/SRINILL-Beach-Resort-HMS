@@ -9,13 +9,8 @@ package control;
  *
  * @author ASUS
  */
-import static control.CommonControl.printReport;
 import java.awt.print.PrinterException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import javax.swing.*;
 import java.sql.ResultSet;
@@ -29,7 +24,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
-import static net.sf.jasperreports.engine.JasperPrintManager.printReport;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
@@ -187,54 +181,4 @@ public class CommonControl {
             return;
         }
     }
-
-    public static void printReportNew(String reportName, Map<String, Object> params, PrintStatus status)
-            throws JRException, SQLException, FileNotFoundException {
-
-        // 1. Load the Jasper report file (.jasper) from resources
-        //String reportPath = "report/" + reportName + ".jasper"; // adjust path as needed
-        String reportPath = "C:/Users/ASUS/Documents/NetBeansProjects/Srinill-Beach-Resort/report/" + reportName + ".jasper";
-        InputStream reportStream = new FileInputStream(reportPath);
-        //InputStream reportStream = CommonControl.class.getClassLoader().getResourceAsStream(reportPath);
-
-        if (reportStream == null) {
-            throw new JRException("Report file not found: " + reportPath);
-        }
-
-        // 2. Fill the report with parameters and database connection
-        Connection con = null;
-        try {
-            con = DatabaseLayer.getConnection(); // your method to get DB connection
-            JasperPrint jasperPrint = JasperFillManager.fillReport(reportStream, params, con);
-
-            // 3. Handle viewing or printing based on PrintStatus
-            switch (status) {
-                case WITH_VIEW:
-                    // Show the report in JasperViewer
-                    JasperViewer viewer = new JasperViewer(jasperPrint, false); // false = not exit on close
-                    viewer.setVisible(true);
-                    break;
-
-                case ONE_COPY:
-                    // Send the report directly to printer
-                    JasperPrintManager.printReport(jasperPrint, true);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException("Unknown PrintStatus: " + status);
-            }
-        } finally {
-            if (con != null && !con.isClosed()) {
-                con.close();
-            }
-            if (reportStream != null) {
-                try {
-                    reportStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 }
