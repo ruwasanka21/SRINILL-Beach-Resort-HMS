@@ -1,6 +1,7 @@
-Download following software with versions
+Download and install following software with versions
 
 iReport 5.6.0
+NetBeans 8.2
 GitHub Desktop
 MySQL Server 5.6
 MySQL Workbench
