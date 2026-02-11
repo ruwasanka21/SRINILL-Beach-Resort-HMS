@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="hallReservation" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="11755c4b-9291-4e32-bc38-4ce052ebae33">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fromMonth" class="java.lang.Integer"/>
+	<parameter name="toMonth" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+            hr.`reservation_id` AS reservation_id,
+            hr.`customer_id` AS customer_id,
+            c.`name` AS customer_name,
+            hr.`hallName` AS hall_name,
+            hr.`reserve_Date` AS reserve_Date,
+            hr.`checkInDate` AS checkInDate,
+            hr.`price` AS price,
+            hr.`status` AS status
+        FROM
+            `hallreservation` hr
+        JOIN
+            `customers` c ON hr.`customer_id` = c.`customer_id`
+        WHERE
+            MONTH(STR_TO_DATE(hr.`reserve_Date`, '%Y-%m-%d')) BETWEEN $P{fromMonth} AND $P{toMonth}
+        ORDER BY hr.`reservation_id`]]>
+	</queryString>
+	<field name="reservation_id" class="java.lang.Integer"/>
+	<field name="customer_id" class="java.lang.Integer"/>
+	<field name="customer_name" class="java.lang.String"/>
+	<field name="hall_name" class="java.lang.String"/>
+	<field name="reserve_Date" class="java.lang.String"/>
+	<field name="checkInDate" class="java.lang.String"/>
+	<field name="price" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100">
+			<image>
+				<reportElement x="2" y="0" width="553" height="95" uuid="cac4247e-dc96-4169-957c-edf2549783b4"/>
+				<imageExpression><![CDATA["Reports\\logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="7310d176-5223-45fd-b7ec-9589a1a9fec4"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hall Reservations Report (with Customer Names)]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="20" uuid="f58d7b92-b237-472e-ac37-2217d68223d5"/>
+				<text><![CDATA[Res ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="0" width="50" height="20" uuid="db829214-22bc-4d8b-bd34-31217d5f0026"/>
+				<text><![CDATA[Cust ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="0" width="110" height="20" uuid="7fa9c768-1f3b-4753-a6b0-7bf4f3056f60"/>
+				<text><![CDATA[Customer Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="80" height="20" uuid="a1cd4a2f-be77-46a2-ad58-bf2a08d1644d"/>
+				<text><![CDATA[Hall Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="80" height="20" uuid="29044b24-5a17-466a-909e-ed4d463471e0"/>
+				<text><![CDATA[Reserve Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="80" height="20" uuid="c4ffdbd0-3a38-4201-b3f7-ac263ffbfa3f"/>
+				<text><![CDATA[Check-In Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="0" width="55" height="20" uuid="e367642a-98bc-4d3a-9b45-d33e97cf066d"/>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="0" width="60" height="20" uuid="06dfe9b6-ed55-41a5-82e6-4c1a536e1a5d"/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="40" height="20" uuid="931a1076-2e73-4c62-a8d4-bbda350d068f"/>
+				<textFieldExpression><![CDATA[$F{reservation_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="50" height="20" uuid="a74a02f9-857b-43ce-9d3d-1c80a013efbd"/>
+				<textFieldExpression><![CDATA[$F{customer_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="0" width="110" height="20" uuid="aacc6f74-9e3f-49b0-b3fa-976e2909ab7f"/>
+				<textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="80" height="20" uuid="24e97bc0-263a-4076-baba-8ed9bef6505e"/>
+				<textFieldExpression><![CDATA[$F{hall_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="80" height="20" uuid="a586fe09-0d3e-4003-9a9f-fe58f99ea915"/>
+				<textFieldExpression><![CDATA[$F{reserve_Date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="80" height="20" uuid="d1de054e-54ce-4bad-bacd-d49d64f07f03"/>
+				<textFieldExpression><![CDATA[$F{checkInDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="0" width="55" height="20" uuid="623a3ed6-e45d-445c-8e20-a7820c728ef4"/>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="495" y="0" width="60" height="20" uuid="c325cdcb-16ee-40e1-8e44-35457c438316"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

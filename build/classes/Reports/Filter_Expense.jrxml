@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="All_Income" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1b26ac15-1e60-45c1-8103-6669d1bc69ad">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="16"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="filterType" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SelectDate" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     expense.`ID` AS expense_ID,
+     expense.`Name` AS expense_Name,
+     expense.`Des` AS expense_Des,
+     expense.`LKR` AS expense_LKR,
+     expense.`Date` AS expense_Date
+FROM
+     `expense` expense
+WHERE
+    (
+        $P{filterType} = 'daily'
+        AND DATE(expense.`Date`) = DATE($P{SelectDate})
+    )
+    OR (
+        $P{filterType} = 'monthly'
+        AND MONTH(expense.`Date`) = MONTH($P{SelectDate})
+        AND YEAR(expense.`Date`) = YEAR($P{SelectDate})
+    )
+    OR (
+        $P{filterType} = 'yearly'
+        AND YEAR(expense.`Date`) = YEAR($P{SelectDate})
+    )]]>
+	</queryString>
+	<field name="expense_ID" class="java.lang.Integer"/>
+	<field name="expense_Name" class="java.lang.String"/>
+	<field name="expense_Des" class="java.lang.String"/>
+	<field name="expense_LKR" class="java.math.BigDecimal"/>
+	<field name="expense_Date" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="126" splitType="Stretch">
+			<image>
+				<reportElement x="2" y="0" width="553" height="95" uuid="ff20feca-2c67-4d57-8000-facfd78ade7d"/>
+				<imageExpression><![CDATA["Reports\\logo.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="1" y="105" width="551" height="20" backcolor="#666666" uuid="7424b206-85cb-47c7-b69e-75cb7d0a4c8c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="105" width="551" height="20" forecolor="#FFFFFF" uuid="4cbe7b27-0e07-4004-bfc7-021994837b81"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expenses Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="e70f697b-eb6f-49b1-8af9-59899dbef881"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="36" height="15" uuid="198222f1-e407-4d3a-b08b-a80699585e16"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="36" y="19" width="140" height="15" uuid="f3f7086b-177c-4a9c-8b8c-5350dcff1297"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="176" y="19" width="157" height="15" uuid="46c94fa2-190f-4c72-9261-b2ccb9a9ec55"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="333" y="19" width="111" height="15" uuid="48a4e079-59da-4134-ad16-4c3fb013fa80"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[LKR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="444" y="19" width="111" height="15" uuid="cf26ddf1-b041-4060-bd83-2c63acf38912"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="25cc6e77-6b3d-4864-a60d-0b4e145622b6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="36" height="15" uuid="b0fa622d-2247-4a48-a4e6-e270c9122135"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expense_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="36" y="0" width="140" height="15" uuid="df380bdc-eafa-4c72-9e66-c35cc1a6a62c"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expense_Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="176" y="0" width="157" height="15" uuid="2505f5de-9934-4cbb-9ce8-0dc689e3679d"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expense_Des}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="333" y="0" width="111" height="15" uuid="a3932892-7cee-4e8c-8285-7dbfe2e6444e"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expense_LKR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement style="Detail" x="444" y="0" width="111" height="15" uuid="280c761f-76bf-4684-bf04-26ed87095410"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expense_Date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="087b55d6-659f-43f9-9878-8a471ad76780"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="1ac7c0b6-6c5e-4c90-a896-960d893df793"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="1ab4c0ba-2b2f-4270-99cc-98d8bfb68790"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="2791d57c-56ae-47bc-8012-ce3b8604ecbc"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

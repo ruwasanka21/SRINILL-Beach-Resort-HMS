@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="All_Room_Details" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="583eb55c-6da7-4f2b-b458-7ae8f00d7deb">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="134"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     rooms.`room_no` AS rooms_room_no,
+     rooms.`category` AS rooms_category,
+     rooms.`bed_type` AS rooms_bed_type,
+     rooms.`floor` AS rooms_floor,
+     rooms.`price` AS rooms_price,
+     rooms.`ac` AS rooms_ac,
+     rooms.`fan` AS rooms_fan,
+     rooms.`tv` AS rooms_tv,
+     rooms.`mini_bar` AS rooms_mini_bar,
+     rooms.`balcony_view` AS rooms_balcony_view,
+     rooms.`wifi_access` AS rooms_wifi_access,
+     rooms.`attached_bathroom` AS rooms_attached_bathroom
+FROM
+     `rooms` rooms]]>
+	</queryString>
+	<field name="rooms_room_no" class="java.lang.Integer"/>
+	<field name="rooms_category" class="java.lang.String"/>
+	<field name="rooms_bed_type" class="java.lang.String"/>
+	<field name="rooms_floor" class="java.lang.Integer"/>
+	<field name="rooms_price" class="java.math.BigDecimal"/>
+	<field name="rooms_ac" class="java.lang.Boolean"/>
+	<field name="rooms_fan" class="java.lang.Boolean"/>
+	<field name="rooms_tv" class="java.lang.Boolean"/>
+	<field name="rooms_mini_bar" class="java.lang.Boolean"/>
+	<field name="rooms_balcony_view" class="java.lang.Boolean"/>
+	<field name="rooms_wifi_access" class="java.lang.Boolean"/>
+	<field name="rooms_attached_bathroom" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="129" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="1" width="553" height="95" uuid="5f7fdd5c-ad80-430c-b319-847b9c58af0c"/>
+				<imageExpression><![CDATA["Reports\\logo.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="1" y="108" width="551" height="20" backcolor="#666666" uuid="174e5e2b-bec0-4bd8-a605-7f714652b4b9"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="108" width="551" height="20" forecolor="#FFFFFF" uuid="fbbaae2f-be41-4e79-8366-29b93f2be9c5"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rooms's Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="a63f44fd-e7fb-4717-9940-6bc153713e5b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="46" height="15" uuid="d5824d85-65f5-4d2b-b285-2302195ea1b4"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Room No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="46" y="19" width="46" height="15" uuid="3979938c-9afc-457d-933f-aab50c6cdbee"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Category]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="92" y="19" width="46" height="15" uuid="0bc05494-a548-4222-956b-267763d21b00"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Bed Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="138" y="19" width="46" height="15" uuid="8f5c1f56-c237-44db-a161-811038a10cdb"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Floor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="184" y="19" width="46" height="15" uuid="b361057c-a79b-4c33-8af4-b215f4faccee"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="230" y="19" width="46" height="15" uuid="f4002bf7-d407-4790-9cf5-db06598037e9"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[AC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="276" y="19" width="46" height="15" uuid="0ece6b57-8096-4650-b9f8-85037ef3f71c"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Fan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="322" y="19" width="46" height="15" uuid="288be1c2-9010-4077-b621-ab28bd6dffff"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[TV]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="368" y="19" width="46" height="15" uuid="7a5ba03d-3fb0-4d7b-9d8a-dd3bd493224f"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Mini Bar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="414" y="19" width="46" height="15" uuid="252bb405-0427-45ff-8d39-3f0149b19fa2"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Balcony View]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="460" y="19" width="36" height="15" uuid="a4988505-44d5-40a5-aa11-4eb1c6d8e186"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[WiFi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="496" y="19" width="56" height="15" uuid="9326db37-53e5-4e91-a2ef-defb1e49c49a"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Bathroom]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="49a1b43c-3a8d-445e-856e-2fc5ad84f6bd"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="46" height="15" uuid="3049ece6-c5ef-46e2-800d-8dafa10e8da4"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_room_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="46" y="0" width="46" height="15" uuid="d9e512b0-3bee-41ca-8b70-41a8fb6ddc37"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_category}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="92" y="0" width="46" height="15" uuid="33bb96a4-e457-4e7c-bac6-31e9c5043a85"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_bed_type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="138" y="0" width="46" height="15" uuid="4e712852-4c8d-4f0c-92e6-cbb24527af38"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_floor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="184" y="0" width="46" height="15" uuid="dc3dea27-c98f-4530-ae0c-8f8bf488fa96"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="230" y="0" width="46" height="15" uuid="5d1c7478-84e8-4983-9bf1-c80fe7a8ae3f"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_ac}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="276" y="0" width="46" height="15" uuid="594faecc-d1f6-4fa1-a65c-152775fcf1b7"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_fan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="322" y="0" width="46" height="15" uuid="a14b0a55-d68e-44cb-ac4d-2ae47b94fd8b"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_tv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="368" y="0" width="46" height="15" uuid="7bdc0d88-c273-438e-9b74-4866efabc1d5"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_mini_bar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="414" y="0" width="46" height="15" uuid="de0c3302-95dc-4f54-93d6-5af6d01eb344"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_balcony_view}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="460" y="0" width="36" height="15" uuid="a4f07eb1-d4f5-4692-b373-4d7ec9d1079c"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_wifi_access}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="496" y="0" width="56" height="15" uuid="2aa34005-e720-4bde-b007-1e644655e159"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rooms_attached_bathroom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="75a61b41-b3ec-4963-aa59-ff660460e5f1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="2be6576e-7fd8-41be-b24d-37a895727d7f"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="cb9bc745-c36a-457e-9ac3-1663a56b6b64"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="8ab780a4-27fa-4a46-b5ad-9825bebf6ce9"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

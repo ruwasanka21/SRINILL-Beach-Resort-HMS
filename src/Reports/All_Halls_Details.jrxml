@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="All_Halls_Details" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4c9b3097-fcaa-43c6-88ed-9b78102c04ca">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     halls.`hall_id` AS halls_hall_id,
+     halls.`hall_name` AS halls_hall_name,
+     halls.`capacity` AS halls_capacity,
+     halls.`price` AS halls_price,
+     halls.`created_at` AS halls_created_at
+FROM
+     `halls` halls]]>
+	</queryString>
+	<field name="halls_hall_id" class="java.lang.Integer"/>
+	<field name="halls_hall_name" class="java.lang.String"/>
+	<field name="halls_capacity" class="java.lang.Integer"/>
+	<field name="halls_price" class="java.math.BigDecimal"/>
+	<field name="halls_created_at" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="128" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="1" width="553" height="95" uuid="0902ee89-9bd1-4dc2-9768-78d1e02cd71e"/>
+				<imageExpression><![CDATA["Reports\\logo.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="1" y="107" width="551" height="20" backcolor="#666666" uuid="3d34b3c6-21eb-4a8d-8cda-e3e7a38a0401"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="107" width="551" height="20" forecolor="#FFFFFF" uuid="ea57ae67-6e12-4271-8edb-b2ccd9420664"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Halls's Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="de2823e9-29cf-406c-8997-32eed32f1d6f"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="84" height="15" uuid="534c2e14-51ae-4597-8d35-07a5eeb0d069"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Hall ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="84" y="19" width="138" height="15" uuid="35a52816-dd31-4a1a-89b4-2e376fd0b831"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Hall Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="222" y="19" width="111" height="15" uuid="8d5aa7e2-40be-45a1-b113-db0b45cc16d8"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Capacity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="333" y="19" width="111" height="15" uuid="2c2f93c3-b5f6-452b-864a-6aa7a5d6dd56"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="444" y="19" width="111" height="15" uuid="70b6233b-3497-4eee-93d9-25a2ca77db43"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Added Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="cbfbfe6b-c0eb-4c18-bc05-3e011b1c7cf9"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="84" height="15" uuid="a85e6b17-2fdc-49ce-bebc-84212aebdf7c"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{halls_hall_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="84" y="0" width="138" height="15" uuid="22c3cba9-fc77-407c-ac77-f6faa9d19ece"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{halls_hall_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="222" y="0" width="111" height="15" uuid="d7ec1c61-cdaa-48ba-9688-c340faed3752"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{halls_capacity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="333" y="0" width="111" height="15" uuid="97accf19-c896-4154-b988-8d8afd986ebf"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{halls_price}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="Detail" x="444" y="0" width="111" height="15" uuid="b8a36f4d-34d4-421f-9dc7-e3904f44a8c9"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{halls_created_at}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="0f054bd0-ccb9-45e4-9f01-aa8184e43ab1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="01b10bf0-e229-4f8e-9f54-75c1d019bf25"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="d7e3d161-a01d-47e0-beba-762895ee1a3c"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="74d4bb3d-8e78-450b-85f7-03fa390d1c1a"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

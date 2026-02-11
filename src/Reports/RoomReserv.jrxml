@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+ name="RoomReservation" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfb8b71d-e70e-400f-9273-7d62300b9783">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fromMonth" class="java.lang.Integer"/>
+	<parameter name="toMonth" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+            rr.`reservation_id` AS Reserv_id,
+            rr.`customer_id` AS Customer_id,
+            c.`name` AS customer_name,
+            rr.`room_id` AS Room_id,
+            rr.`reserve_Date` AS Reserve_Date,
+            rr.`checkInDate` AS CheckInDate,
+            rr.`checkOutDate` AS CheckOutDate,
+            rr.`price` AS Price,
+            rr.`status` AS Status
+        FROM
+            `roomreservation` rr
+        JOIN
+            `customers` c ON rr.`customer_id` = c.`customer_id`
+        WHERE
+            MONTH(rr.`reserve_Date`) BETWEEN $P{fromMonth} AND $P{toMonth}
+        ORDER BY
+            rr.`reservation_id`;]]>
+	</queryString>
+	<field name="Reserv_id" class="java.lang.Integer"/>
+	<field name="Customer_id" class="java.lang.Integer"/>
+	<field name="customer_name" class="java.lang.String"/>
+	<field name="Room_id" class="java.lang.Integer"/>
+	<field name="Reserve_Date" class="java.sql.Date"/>
+	<field name="CheckInDate" class="java.sql.Date"/>
+	<field name="CheckOutDate" class="java.sql.Date"/>
+	<field name="Price" class="java.lang.String"/>
+	<field name="Status" class="java.lang.String"/>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="10" width="555" height="30" uuid="a94582da-9983-4738-9097-2565c1b2651b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monthly Room Reservations Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="0" width="60" height="20" uuid="0a4ff7d3-00d1-4629-86d0-0cf2dcffb767"/>
+				<text><![CDATA[Res ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="0" width="70" height="20" uuid="010c2d20-986a-4514-8c80-1d13dbdaf03e"/>
+				<text><![CDATA[Cust ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="0" width="100" height="20" uuid="86c19202-63b8-483a-82d2-10bdccffedef"/>
+				<text><![CDATA[Customer Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="50" height="20" uuid="43b165f1-5eeb-4f29-805f-adb3e014c46b"/>
+				<text><![CDATA[Room]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="80" height="20" uuid="a967fbff-9932-4fa8-b68d-9db3e357e8a3"/>
+				<text><![CDATA[Reserve Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="70" height="20" uuid="16abb563-18b5-4e70-9c62-ca588fe27a72"/>
+				<text><![CDATA[Check-In]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="430" y="0" width="70" height="20" uuid="eb15a96b-f8c4-4a63-bade-81796fd32eff"/>
+				<text><![CDATA[Check-Out]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="55" height="20" uuid="d3980961-e701-4f4e-b93a-0f0a1d301f04"/>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="60" height="20" uuid="45cd9b7d-da74-4a23-8c37-dc9c307c058c"/>
+				<textFieldExpression><![CDATA[$F{Reserv_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="0" width="70" height="20" uuid="35d85900-6f47-4768-bb40-7a6d77e26dbb"/>
+				<textFieldExpression><![CDATA[$F{Customer_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="0" width="100" height="20" uuid="defd7918-1aa0-48c5-acd4-1a0b8b180f5c"/>
+				<textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="0" width="50" height="20" uuid="e4376bea-6412-444e-a20d-38a6ce9551aa"/>
+				<textFieldExpression><![CDATA[$F{Room_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="80" height="20" uuid="61d1dfc0-bca4-44f3-bcef-95b00f696955"/>
+				<textFieldExpression><![CDATA[$F{Reserve_Date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="70" height="20" uuid="25cb8204-f4ea-4832-adc9-f40c7e35aa53"/>
+				<textFieldExpression><![CDATA[$F{CheckInDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="0" width="70" height="20" uuid="b479620a-133d-42c9-a5da-3c3573c4f436"/>
+				<textFieldExpression><![CDATA[$F{CheckOutDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="55" height="20" uuid="16883505-cfde-4c5d-ac5f-bff62f933fa4"/>
+				<textFieldExpression><![CDATA[$F{Price}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="10" width="555" height="20" uuid="3344a216-253e-4463-950e-f76c60ea1ba1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Page Footer]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="All_Events_Details" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ed3514a-a183-4b05-8eda-63b2973cf74a">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString>
+		<![CDATA[SELECT
+     events.`event_id` AS events_event_id,
+     events.`hallName` AS events_hall_Name,
+     events.`customer_id` AS events_customer_id,
+     events.`customer_name` AS events_customer_name,
+     events.`event_name` AS events_event_name,
+     events.`catergory` AS events_catergory,
+     events.`NoOfPeople` AS events_NoOfPeople,
+     events.`event_date` AS events_event_date,
+     events.`created_at` AS events_created_at
+FROM
+     `events` events]]>
+	</queryString>
+	<field name="events_event_id" class="java.lang.Integer"/>
+	<field name="events_hall_Name" class="java.lang.String"/>
+	<field name="events_customer_id" class="java.lang.Integer"/>
+	<field name="events_customer_name" class="java.lang.String"/>
+	<field name="events_event_name" class="java.lang.String"/>
+	<field name="events_catergory" class="java.lang.String"/>
+	<field name="events_NoOfPeople" class="java.lang.Integer"/>
+	<field name="events_event_date" class="java.sql.Date"/>
+	<field name="events_created_at" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="128" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="1" width="553" height="95" uuid="cb66242e-7d66-437e-bd32-7a6d935c0508"/>
+				<imageExpression><![CDATA["Reports\\logo.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="1" y="107" width="551" height="20" backcolor="#666666" uuid="c47590e7-bd12-4325-ae0d-447583181b08"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="107" width="551" height="20" forecolor="#FFFFFF" uuid="47754d9d-3c2b-45b5-b2d8-2944579d97d3"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Events's Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="752e7b36-776e-4c48-8e07-f79cf6dbab7e"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="52" height="15" uuid="0ce81a9c-2c57-433a-9e7e-b29457a341f7"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Event ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="52" y="20" width="46" height="15" uuid="f2965c69-b9a5-4596-97ef-5b45378cd8a9"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Hall ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="98" y="19" width="49" height="15" uuid="1e433124-72a9-4f42-a24f-803415acc40d"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Cus ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="147" y="19" width="93" height="15" uuid="f2dba605-2bc1-48ce-bb52-50d192d19e9d"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Cus Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="240" y="19" width="104" height="15" uuid="2f71277a-afa2-4694-8469-4160e7ac5882"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Event Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="344" y="19" width="72" height="15" uuid="9ca6c905-a24a-4265-9c3a-b6aa2f68379f"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[NoOfPeoples]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="416" y="19" width="72" height="15" uuid="1cd0daea-2170-42e2-b513-a5634eac8da7"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Event Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="488" y="19" width="61" height="15" uuid="9d17be2d-511b-4847-ac37-fb598b341f1f"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Reserved Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="4c1af90c-72b6-43e6-8e8e-e83566a95f93"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="52" height="15" uuid="7bcc2648-6249-4bfd-b7df-e009fb55ea79"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{events_event_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="52" y="1" width="46" height="15" uuid="3e7eb547-977b-4af2-ac1e-df1f21bb4418"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{events_hall_Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="98" y="0" width="49" height="15" uuid="68f36f0f-dbc8-4d1e-a54f-aad1a5126108"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{events_customer_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="147" y="0" width="93" height="15" uuid="f21140e9-1e3c-4f35-95ba-0d40203e37eb"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{events_customer_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="240" y="0" width="104" height="15" uuid="300456fb-353d-491d-81f0-ae641a3fa828"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{events_event_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+	<reportElement style="Detail" x="344" y="0" width="72" height="15" uuid="02368240-edb9-4489-8f47-50a2a9479c25"/>
+	<textElement>
+		<font size="11"/>
+	</textElement>
+	<textFieldExpression><![CDATA[$F{events_NoOfPeople}]]></textFieldExpression>
+</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="Detail" x="416" y="0" width="72" height="15" uuid="2802180f-400a-4963-ad9d-7f16dd8b6f68"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{events_event_date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="Detail" x="488" y="0" width="61" height="15" uuid="d68f73da-ece4-4c6b-8fa9-0230577d9776"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{events_created_at}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="2eab3d9d-54a5-4c19-9c13-df6755a3d648"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="785d5322-50af-4ef5-be16-9bc4915ca674"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="96d777cf-abe9-4978-bd5c-3c941e58184a"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="6d252267-ed3f-46fe-af7b-024637048a8c"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

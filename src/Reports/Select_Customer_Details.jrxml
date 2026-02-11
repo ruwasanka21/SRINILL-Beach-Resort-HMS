@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="All_Suppliers_Details" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fa18c497-e414-40c0-9bb9-cc4e81e95d19">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="1.366026910730142"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="133"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="selectCus" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     customers.`customer_id` AS customers_customer_id,
+     customers.`name` AS customers_name,
+     customers.`gender` AS customers_gender,
+     customers.`email` AS customers_email,
+     customers.`phone` AS customers_phone,
+     customers.`address` AS customers_address,
+     customers.`created_at` AS customers_created_at
+FROM
+     `customers` customers
+WHERE
+     name = $P{selectCus}]]>
+	</queryString>
+	<field name="customers_customer_id" class="java.lang.Integer"/>
+	<field name="customers_name" class="java.lang.String"/>
+	<field name="customers_gender" class="java.lang.String"/>
+	<field name="customers_email" class="java.lang.String"/>
+	<field name="customers_phone" class="java.lang.String"/>
+	<field name="customers_address" class="java.lang.String"/>
+	<field name="customers_created_at" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="150" splitType="Stretch">
+			<image>
+				<reportElement x="2" y="0" width="553" height="95" uuid="933c6f4e-87b7-481b-8aa3-b6545584fd9d"/>
+				<imageExpression><![CDATA["Reports\\logo.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="2" y="113" width="551" height="20" backcolor="#666666" uuid="072613b2-55fe-4cd5-a8ec-d5f840f0218d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="87" y="113" width="466" height="20" forecolor="#FFFFFF" uuid="b588aed2-512f-47c4-95ea-4e0500bdd86a"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Customer's Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="198" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="10" y="10" width="94" height="20" forecolor="#000000" uuid="60cf2579-527f-4feb-9c95-5f1d58d69728"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Customer ID : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="10" y="50" width="94" height="20" forecolor="#000000" uuid="f247d681-cb18-4e3b-9570-5634e7094372"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Gender : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="10" y="130" width="94" height="20" forecolor="#000000" uuid="09fa3b54-982d-483a-80c9-3e1a6b558c30"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Added Date : ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="108" y="90" width="338" height="18" uuid="9b060a09-e7b9-4890-b772-497bc247ff88"/>
+				<textElement>
+					<font fontName="Dialog" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customers_phone}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="108" y="50" width="338" height="18" uuid="fb8a9ff0-213a-4629-9809-9e8434b81a2f"/>
+				<textElement>
+					<font fontName="Dialog" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customers_gender}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="10" y="70" width="94" height="20" forecolor="#000000" uuid="c4a38e60-99c3-410a-b02c-9195641bc7d5"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Email : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="10" y="110" width="94" height="20" forecolor="#000000" uuid="19392bcf-30eb-4a0f-bcbc-b1ff098fc194"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Address : ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="108" y="70" width="338" height="18" uuid="ca7f8af3-7b54-4749-a79d-b0025abfdf01"/>
+				<textElement>
+					<font fontName="Dialog" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customers_email}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="108" y="30" width="338" height="18" uuid="7f0f9eb9-c47d-45de-8e29-7c2c26b67fd9"/>
+				<textElement>
+					<font fontName="Dialog" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customers_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="108" y="130" width="338" height="18" uuid="6bab2447-6fd3-4ae5-91d4-894f2285ffb3"/>
+				<textElement>
+					<font fontName="Dialog" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customers_created_at}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="10" y="90" width="94" height="20" forecolor="#000000" uuid="c6182f43-7d6d-480c-8f83-3986b88d70f6"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Phone : ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="108" y="110" width="338" height="18" uuid="6b554a47-f213-4584-9e47-6240c945a464"/>
+				<textElement>
+					<font fontName="Dialog" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customers_address}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="10" y="30" width="94" height="20" forecolor="#000000" uuid="f0f2ffee-a2b9-48cc-8d3f-8c94ca483732"/>
+				<textElement textAlignment="Right">
+					<font fontName="Dialog" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Name : ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="108" y="10" width="338" height="18" uuid="9b5b52cf-3de9-4d94-8385-00a5d897e327"/>
+				<textElement>
+					<font fontName="Dialog" size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customers_customer_id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="-5" width="555" height="1" uuid="0b661e66-6abb-483a-bc52-322cb0b9050f"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#9DB1B8" uuid="549d8da2-0f74-414c-a648-a3eb943657c1"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="0" width="197" height="13" forecolor="#FFFFFF" uuid="c7599311-15d2-48a9-a60b-dbf0110e1016"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="416" y="0" width="80" height="13" forecolor="#FFFFFF" uuid="69f8465b-8202-4d5d-9772-eec253bf10a3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="511" y="0" width="40" height="13" forecolor="#FFFFFF" uuid="6c78de89-3073-41a4-a0be-886c76723e17"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

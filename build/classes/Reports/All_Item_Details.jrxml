@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ec37053e-59f7-4a28-ab29-6650597d1d09">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString>
+		<![CDATA[SELECT
+     inventory.`itemID` AS inventory_itemID,
+     inventory.`itemName` AS inventory_itemName,
+     inventory.`qty` AS inventory_qty,
+     inventory.`itemCategory` AS inventory_itemCategory,
+     inventory.`supplier` AS inventory_supplier,
+     inventory.`UpdatedDate` AS inventory_UpdatedDate
+FROM
+     `inventory` inventory  ORDER BY itemID]]>
+	</queryString>
+	<field name="inventory_itemID" class="java.lang.String"/>
+	<field name="inventory_itemName" class="java.lang.String"/>
+	<field name="inventory_qty" class="java.lang.Integer"/>
+	<field name="inventory_itemCategory" class="java.lang.String"/>
+	<field name="inventory_supplier" class="java.lang.String"/>
+	<field name="inventory_UpdatedDate" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="129" splitType="Stretch">
+			<image>
+				<reportElement x="-1" y="0" width="553" height="95" uuid="c49385f0-1218-44d8-a31b-c895f91a9e64"/>
+				<imageExpression><![CDATA["Reports\\logo.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="0" y="109" width="555" height="20" backcolor="#666666" uuid="4eb130ce-27e7-4d51-a439-d0490fdbfed3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="109" width="555" height="20" forecolor="#FFFFFF" uuid="b60f4135-8aa9-4c62-894e-7238915eef91"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[All Inventory Item's Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="005ab98c-811c-44ed-b722-da1d322a80cc"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="58" height="15" uuid="f4c25bbf-6990-40e8-be08-59fb68b8fdd9"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Item ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="58" y="19" width="109" height="15" uuid="3f2d81c9-d0c7-4a26-8bde-4efa11caa389"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Item Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="168" y="20" width="42" height="15" uuid="5c5f979a-a633-4308-a12c-45239476e0ea"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="210" y="20" width="106" height="15" uuid="e87b79fe-8608-4134-9cdc-48e50fa83de5"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Category]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="316" y="19" width="144" height="15" uuid="56581b94-0755-4775-8950-26d5b183d072"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Supplier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="460" y="19" width="92" height="15" uuid="0cda06a1-b117-4369-9982-f0d1a1dee63e"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Updated Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="68638a81-a481-4eec-98af-8b389d83dca8"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="58" height="15" uuid="474fa311-e3b0-4b35-9ed4-18157f055e74"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventory_itemID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="58" y="0" width="109" height="15" uuid="b6056b9f-b4b8-4c8b-a09f-dfb103ee3d9e"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventory_itemName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="168" y="1" width="42" height="15" uuid="a8419268-3f7a-4a6c-a57e-9c0ad920c962"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventory_qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="210" y="1" width="106" height="15" uuid="c555ebca-b4d0-467a-81be-3996f88bdc13"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventory_itemCategory}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="316" y="0" width="144" height="15" uuid="c4827e67-22ce-424f-9e9c-4e47cea89489"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventory_supplier}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="Detail" x="460" y="0" width="92" height="15" uuid="7581d00d-0f6a-4553-aab5-1d7e60a29927"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inventory_UpdatedDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="a2636644-7a30-449c-8b9a-3c39eb20b825"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="2aa0b5ae-4fdc-4bac-a182-e81d95d22218"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="273ffe06-5cee-45f8-a17c-db7f5d27891c"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="9d2e55a9-a2b2-47af-877d-84c1f9b58ab6"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
