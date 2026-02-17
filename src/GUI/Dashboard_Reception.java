@@ -86,7 +86,7 @@ public class Dashboard_Reception extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel12.setText("tharindu");
+        jLabel12.setText("user");
         jLabel12.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel5.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 8, 105, 24));
 

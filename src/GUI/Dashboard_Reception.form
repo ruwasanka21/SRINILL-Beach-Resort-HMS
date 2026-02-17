@@ -120,7 +120,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="tharindu"/>
+                <Property name="text" type="java.lang.String" value="user"/>
                 <Property name="verticalAlignment" type="int" value="3"/>
               </Properties>
               <Constraints>

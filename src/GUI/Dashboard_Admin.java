@@ -89,7 +89,7 @@ public class Dashboard_Admin extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("meshan");
+        jLabel2.setText("admin");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 105, 20));
 
