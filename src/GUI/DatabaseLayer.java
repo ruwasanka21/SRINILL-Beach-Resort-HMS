@@ -11,7 +11,7 @@ public class DatabaseLayer {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/panorama_hotel", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/srinill_beach_resort_2", "root", "");
         } catch (Exception e) {
             System.out.println("Database connection error: " + e.getMessage());
         }

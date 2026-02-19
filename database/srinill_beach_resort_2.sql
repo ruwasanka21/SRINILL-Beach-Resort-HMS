@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 19, 2026 at 04:32 PM
+-- Generation Time: Feb 19, 2026 at 04:47 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `panorama_hotel`
+-- Database: `srinill_beach_resort_2`
 --
 
 -- --------------------------------------------------------
