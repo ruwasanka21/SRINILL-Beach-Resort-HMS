@@ -24,9 +24,16 @@ public class Reservation extends javax.swing.JPanel {
     private int customerID; 
     private String customerEmail;
     private String customerName;
+    private boolean confirmed = false;
+    private int roomNo;
+    private LocalDate day;
+    
+    public boolean isReservationConfirmed() {
+        return confirmed;
+    }
 
     public Reservation(int customerID) {
-    this.customerID = customerID;
+        this.customerID = customerID;
 }
     public int getCustomerID() {
         return customerID;
