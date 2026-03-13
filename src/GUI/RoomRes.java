@@ -101,6 +101,14 @@ public class RoomRes extends JPanel {
         if (gridPanel == null) {
             return;
         }
+        
+        for (Component comp : gridPanel.getComponents()) {
+        if (comp instanceof ModernRoomButton) {
+            ModernRoomButton btn = (ModernRoomButton) comp;
+            btn.booked = false;
+            btn.setBackground(COLOR_SUCCESS);
+        }
+    }
 
         Connection con = null;
         PreparedStatement pst = null;
@@ -192,20 +200,30 @@ public class RoomRes extends JPanel {
     private JPanel createModernHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(COLOR_SURFACE);
-        header.setPreferredSize(new Dimension(TARGET_WIDTH, 80)); 
+        header.setPreferredSize(new Dimension(TARGET_WIDTH, 80));
         header.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDER),
-            new EmptyBorder(15, 30, 15, 30)
+                BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDER),
+                new EmptyBorder(15, 30, 15, 30)
         ));
 
-        JLabel title = new JLabel("Room Availability - " + new SimpleDateFormat("MMMM yyyy").format(currentMonth.getTime()));
+        JLabel title = new JLabel("Room Availability - "
+                + new SimpleDateFormat("MMMM yyyy").format(currentMonth.getTime()));
         title.setFont(new Font("SansSerif", Font.BOLD, 22));
         title.setForeground(COLOR_TEXT_PRIMARY);
         header.add(title, BorderLayout.WEST);
 
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         actions.setBackground(COLOR_SURFACE);
-        actions.add(createModernButton("Refresh", COLOR_PRIMARY, Color.WHITE));
+
+        // CREATE BUTTON
+        JButton refreshBtn = createModernButton("Refresh", COLOR_PRIMARY, Color.WHITE);
+
+        // CLICK EVENT
+        refreshBtn.addActionListener(e -> {
+            refreshCalendar();
+        });
+
+        actions.add(refreshBtn);
         header.add(actions, BorderLayout.EAST);
 
         return header;

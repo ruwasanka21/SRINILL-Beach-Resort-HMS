@@ -250,42 +250,42 @@ public class Dashboard_Reception extends javax.swing.JFrame {
 
     private void btnSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettingsActionPerformed
         // TODO add your handling code here:
-//        try {
-//            Settings_Reception Settings_Reception = new Settings_Reception();
-//            jpload.jPanelLoader(panal_load, Settings_Reception);
-//        } catch (Exception e){
-//            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            Settings_Reception Settings_Reception = new Settings_Reception();
+            jpload.jPanelLoader(panal_load, Settings_Reception);
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSettingsActionPerformed
 
     private void btnRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordsActionPerformed
         // TODO add your handling code here:
-//        try {
-//            Reports_Reception Records = new Reports_Reception();
-//            jpload.jPanelLoader(panal_load, Records);
-//        } catch (Exception e){
-//            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            Reports_Reception Records = new Reports_Reception();
+            jpload.jPanelLoader(panal_load, Records);
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRecordsActionPerformed
 
     private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         // TODO add your handling code here:
-//        try {
-//            Information Information = new Information();
-//            jpload.jPanelLoader(panal_load, Information);
-//        } catch (Exception e){
-//            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            Information Information = new Information();
+            jpload.jPanelLoader(panal_load, Information);
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnInfoActionPerformed
 
     private void btnEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEventsActionPerformed
         // TODO add your handling code here:
-//        try {
-//            Events Events = new Events();
-//            jpload.jPanelLoader(panal_load, Events);
-//        } catch (Exception e){
-//            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        try {
+            Events Events = new Events();
+            jpload.jPanelLoader(panal_load, Events);
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this, "Database Connection Error. Try Again. ( Database Offline )", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEventsActionPerformed
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
