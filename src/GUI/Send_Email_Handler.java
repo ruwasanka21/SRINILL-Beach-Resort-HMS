@@ -10,8 +10,8 @@ public class Send_Email_Handler {
 
     public static void sendEmail(String toEmail, String subject, String body) {
         
-        final String fromEmail = "panoramahotel047@gmail.com";  
-        final String password = "nwgg xqeh nwrq ihrx";  
+        final String fromEmail = "balancergame@gmail.com";  
+        final String password = "qlms mghn hlin dhiq";  
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
