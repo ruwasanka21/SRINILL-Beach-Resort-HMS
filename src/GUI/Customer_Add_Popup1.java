@@ -316,8 +316,8 @@ public class Customer_Add_Popup1 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Reservation reservation = new Reservation(); // Assuming 1 is a test ID
-                new Customer_Add_Popup1(reservation).setVisible(true);
+//                Reservation reservation = new Reservation(); // Assuming 1 is a test ID
+//                new Customer_Add_Popup1(reservation).setVisible(true);
             }
         });
     }

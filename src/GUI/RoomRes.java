@@ -3,8 +3,13 @@ package GUI;
 import java.awt.*;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+//import java.util.*;
 import java.util.List;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -38,6 +43,8 @@ public class RoomRes extends JPanel {
     private static final int DAY_COLUMN_WIDTH = 45;
     private static final int ROW_HEIGHT = 45;
     private static final int DAYS_IN_MONTH = 31;
+    
+    private JPanel gridPanel;
 
     private static class RoomInfo {
         int roomNo;
@@ -58,6 +65,7 @@ public class RoomRes extends JPanel {
         fetchRoomsFromDatabase();
         initializeUI();
         setupModernStyling();
+        refreshCalendar();
         //panal_load.set
     }
 
@@ -87,6 +95,84 @@ public class RoomRes extends JPanel {
         // Sort rooms sequentially
         rooms.sort((r1, r2) -> Integer.compare(r1.roomNo, r2.roomNo));
     }
+    
+    public void refreshCalendar() {
+
+        if (gridPanel == null) {
+            return;
+        }
+
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            con = DatabaseLayer.mycon();
+
+            // Get all reservations
+            String sql = "SELECT room_id, checkInDate, checkOutDate FROM roomreservation";
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int room = rs.getInt("room_id");
+                java.sql.Date checkIn = rs.getDate("checkInDate");
+                java.sql.Date checkOut = rs.getDate("checkOutDate");
+
+                // Convert to Calendar for looping
+                Calendar start = Calendar.getInstance();
+                start.setTime(checkIn);
+
+                Calendar end = Calendar.getInstance();
+                end.setTime(checkOut);
+
+                while (!start.after(end)) {
+                    int day = start.get(Calendar.DAY_OF_MONTH);
+
+                    markRoomBooked(room, day);
+
+                    start.add(Calendar.DATE, 1);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception ignored) {
+            }
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+            } catch (Exception ignored) {
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    private void markRoomBooked(int roomNo, int day) {
+        for (Component comp : gridPanel.getComponents()) {
+            if (comp instanceof ModernRoomButton) {
+                ModernRoomButton btn = (ModernRoomButton) comp;
+
+                if (btn.roomNo == roomNo && btn.day == day) {
+                    btn.setBackground(COLOR_DANGER); // red
+                    btn.booked = true;               // mark as booked
+                }
+            }
+        }
+    }
+
+   
 
     private void loadFallbackRooms() {
         for (int i = 1; i <= 20; i++) { // Increased fallback rooms to test vertical scrolling
@@ -157,7 +243,7 @@ public class RoomRes extends JPanel {
         int totalGridHeight = (rooms.size() * ROW_HEIGHT) + (rooms.size() - 1);
 
         // 1. Center Grid (Buttons)
-        JPanel gridPanel = new JPanel(new GridLayout(rooms.size(), DAYS_IN_MONTH, 1, 1));
+        gridPanel = new JPanel(new GridLayout(rooms.size(), DAYS_IN_MONTH, 1, 1));
         gridPanel.setBackground(COLOR_BORDER);
         // Force the layout to overflow by setting its preferred size
         gridPanel.setPreferredSize(new Dimension(totalGridWidth, totalGridHeight));
@@ -308,15 +394,31 @@ public class RoomRes extends JPanel {
 
             if (confirm == JOptionPane.YES_OPTION) {
                 
-                booked = true;
-                setBackground(COLOR_DANGER);
-
-                JOptionPane.showMessageDialog(
-                        RoomRes.this,
-                        "Reservation Successful!",
-                        "Success",
-                        JOptionPane.INFORMATION_MESSAGE
+                LocalDate selectedDate = LocalDate.of(
+                        currentMonth.get(Calendar.YEAR),
+                        currentMonth.get(Calendar.MONTH) + 1,
+                        day
                 );
+
+                Reservation resPanel = new Reservation(roomNo, RoomRes.this);
+
+                JFrame frame = new JFrame("Room Reservation");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.setSize(900, 600);
+                frame.setLocationRelativeTo(null);
+                frame.add(resPanel);
+                frame.setVisible(true);
+                
+                
+//                booked = true;
+//                setBackground(COLOR_DANGER);
+//
+//                JOptionPane.showMessageDialog(
+//                        RoomRes.this,
+//                        "Reservation Successful!",
+//                        "Success",
+//                        JOptionPane.INFORMATION_MESSAGE
+//                );
             }
         }
     }

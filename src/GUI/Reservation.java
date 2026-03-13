@@ -27,6 +27,7 @@ public class Reservation extends javax.swing.JPanel {
     private boolean confirmed = false;
     private int roomNo;
     private LocalDate day;
+    private RoomRes parentCalendar;
     
     public boolean isReservationConfirmed() {
         return confirmed;
@@ -45,34 +46,58 @@ public class Reservation extends javax.swing.JPanel {
         return customerName;
     }
     
-    public Reservation() {
-        initComponents();  
+    public Reservation(int roomNo, RoomRes parent) {
+        initComponents();
+
+        this.roomNo = roomNo;
+        this.parentCalendar = parent;
+
         txtPrice.setEditable(false);
+
         ButtonGroup genderGroup = new ButtonGroup();
         genderGroup.add(radioButtonMale);
         genderGroup.add(radioButtonFemale);
-        
+
         jComboBox2.addItem("-- Select --");
         jComboBox2.addItem("Room");
         jComboBox2.addItem("Hall");
-        
+
         setupEventListeners();
-        
-        txtNIC.getDocument().addDocumentListener(new DocumentListener() {
-        public void insertUpdate(DocumentEvent e) {
-            checkCustomerByNIC();
-        }
-         public void removeUpdate(DocumentEvent e) {
-            checkCustomerByNIC();
-        }
-         public void changedUpdate(DocumentEvent e) {
-                checkCustomerByNIC();
-        }
+
+        // Select reservation type
+        jComboBox2.setSelectedItem("Room");
+
+        // Load rooms
+        loadRoomNumbers();
+
+        // Select clicked room
+        SwingUtilities.invokeLater(() -> {
+            jComboBox3.setSelectedItem(String.valueOf(roomNo));
         });
 
+        // Auto set check-in date from calendar click
+        if (day != null) {
+            java.util.Date date = java.sql.Date.valueOf(day);
+            checkInDate.setDate(date);
+        }
 
+        System.out.println("Room Selected: " + roomNo);
+
+        txtNIC.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                checkCustomerByNIC();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                checkCustomerByNIC();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                checkCustomerByNIC();
+            }
+        });
     }
-    
+
     private void setupEventListeners() {
     jComboBox2.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent evt) {
@@ -100,7 +125,8 @@ public class Reservation extends javax.swing.JPanel {
     private void loadRoomNumbers() {
         jComboBox3.removeAllItems();
         jComboBox3.addItem("-- Select --");
-        
+//        jComboBox3.setSelectedItem(String.valueOf(roomNo));
+//        System.out.println(roomNo);
         Connection con = DatabaseLayer.mycon();
         String sql = "SELECT room_no FROM rooms WHERE availability = 'Available' order by room_no";
         try (PreparedStatement pst = con.prepareStatement(sql);
@@ -896,6 +922,8 @@ public class Reservation extends javax.swing.JPanel {
                     reservID=rs.getInt(1);
                 }
                 JOptionPane.showMessageDialog(this, "Reservation ID: "+reservID+"Room ID: "+id_No+" successfully reserved for the "+customerName);
+                parentCalendar.refreshCalendar();
+               
                 // After successful reservation, update room availability to 'Not Available'
                 String updateAvailabilitySQL = "UPDATE rooms SET availability = 'Ocupied' WHERE room_no = ?";
                 pst = con.prepareStatement(updateAvailabilitySQL);
@@ -904,7 +932,7 @@ public class Reservation extends javax.swing.JPanel {
                 
                 // Send confirmation email
                 try{
-                    String subject = "Panorama hotel Room Reservation Complete!!!";
+                    String subject = "Srinill hotel Room Reservation Complete!!!";
                     String body = "Dear " + customerName + ",\n\nYour room reservation is successful!\n"
                 +"Reservation ID is: "+reservID
                 + "\nYour Room ID is: " +id_No

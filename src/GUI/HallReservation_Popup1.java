@@ -325,8 +325,8 @@ public class HallReservation_Popup1 extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 // Create a Reservation object with a test customer ID
-                Reservation reservation = new Reservation(); // Assuming 1 is a test ID
-                new HallReservation_Popup1(reservation).setVisible(true);
+//                Reservation reservation = new Reservation(); // Assuming 1 is a test ID
+//                new HallReservation_Popup1(reservation).setVisible(true);
             }
         });
     }
