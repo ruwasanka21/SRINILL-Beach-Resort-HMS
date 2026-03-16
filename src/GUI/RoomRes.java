@@ -64,7 +64,7 @@ public class RoomRes extends JPanel {
         
         fetchRoomsFromDatabase();
         initializeUI();
-        setupModernStyling();
+        //setupModernStyling();
         refreshCalendar();
         //panal_load.set
     }

@@ -1,12 +1,8 @@
 
 package GUI;
 
-import java.awt.Color;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import static java.lang.Thread.sleep;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +10,6 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
 
 public class Login_Reception extends javax.swing.JFrame implements Runnable{
     
@@ -48,7 +42,7 @@ public class Login_Reception extends javax.swing.JFrame implements Runnable{
     public void run() {
         for (int i = 1; i <= 100; i++) {
             try {
-                Thread.sleep(20);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Login_Reception.class.getName()).log(Level.SEVERE, null, ex);
             }

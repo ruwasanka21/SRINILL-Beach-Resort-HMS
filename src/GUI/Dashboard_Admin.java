@@ -62,8 +62,8 @@ public class Dashboard_Admin extends javax.swing.JFrame {
         Dashboard_panal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         DateLabel.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        DateLabel.setForeground(new java.awt.Color(204, 204, 204));
-        Dashboard_panal.add(DateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 44, 419, 20));
+        DateLabel.setForeground(new java.awt.Color(255, 255, 255));
+        Dashboard_panal.add(DateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 419, 20));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));

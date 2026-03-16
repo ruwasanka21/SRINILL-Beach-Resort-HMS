@@ -64,8 +64,8 @@ public class Dashboard_Reception extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         DateLabel.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        DateLabel.setForeground(new java.awt.Color(204, 204, 204));
-        jPanel1.add(DateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 40, 419, 20));
+        DateLabel.setForeground(new java.awt.Color(255, 255, 0));
+        jPanel1.add(DateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 419, 20));
 
         jPanel5.setBackground(new java.awt.Color(0, 51, 153));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
