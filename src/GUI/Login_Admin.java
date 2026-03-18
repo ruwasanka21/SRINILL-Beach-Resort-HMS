@@ -1,6 +1,7 @@
 
 package GUI;
 
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 public class Login_Admin extends javax.swing.JFrame implements Runnable{
     
@@ -41,6 +43,8 @@ public class Login_Admin extends javax.swing.JFrame implements Runnable{
 
     @Override
     public void run() {
+        UIManager.put("nimbusOrange", new Color(0, 200, 0));
+
         for (int i = 1; i <= 100; i++) {
             try {
                 Thread.sleep(10); // Adjust speed of progress
