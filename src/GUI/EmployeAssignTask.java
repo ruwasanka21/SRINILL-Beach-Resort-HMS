@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Control.Send_Email_Handler;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -190,70 +191,74 @@ public class EmployeAssignTask extends javax.swing.JPanel {
         Connection con = DatabaseLayer.mycon();
         PreparedStatement pst = null;
         ResultSet rs = null;
-        
-        String empID= txtEmpID.getText();
-        
+
+        String empID = txtEmpID.getText();
+
         try {
-        
-        String sql = "SELECT Name, Job_Role FROM employees WHERE employee_id = ?";
 
-        
-        pst = con.prepareStatement(sql);
-        pst.setString(1, empID);
+            String sql = "SELECT Name, Job_Role FROM employees WHERE employee_id = ?";
 
-        rs = pst.executeQuery();
+            pst = con.prepareStatement(sql);
+            pst.setString(1, empID);
 
-        if (rs.next()) {
-            
-            txtEmpName.setText(rs.getString("Name"));
-            txtJobROle.setText(rs.getString("Job_Role"));
-        } else {
-            JOptionPane.showMessageDialog(null, "Employee not found!");
-        }
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                txtEmpName.setText(rs.getString("Name"));
+                txtJobROle.setText(rs.getString("Job_Role"));
+            } else {
+                JOptionPane.showMessageDialog(null, "Employee not found!");
+            }
 
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (pst != null) pst.close();
-                if (con != null) con.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace(); 
-            JOptionPane.showMessageDialog(null, "Error closing database resources: " + ex.getMessage());
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error closing database resources: " + ex.getMessage());
+            }
         }
-    }
-        
-        
+
+
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignActionPerformed
         // TODO add your handling code here:
-        
+
         Date fullDateTime = (Date) dateSelect.getValue();
-        
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
         String dateOnly = dateFormat.format(fullDateTime);
         String timeOnly = timeFormat.format(fullDateTime);
-        
-        
-        String empID=txtEmpID.getText();
-        String jobRole=txtJobROle.getText();
-        String description=txtDescription.getText();
-        
+
+        String empID = txtEmpID.getText();
+        String jobRole = txtJobROle.getText();
+        String description = txtDescription.getText();
+
         try {
-            Connection con = DatabaseLayer.mycon(); 
-            PreparedStatement pst=null;
+            Connection con = DatabaseLayer.mycon();
+            PreparedStatement pst = null;
 
             String sql = "INSERT INTO employeetasks (employee_id, task_description, dutyDate, dutyTime) VALUES (?, ?, ?, ?)";
             pst = con.prepareStatement(sql);
 
-            pst.setString(1, empID);        
-            pst.setString(2, description);  
-            pst.setString(3, dateOnly);     
-            pst.setString(4, timeOnly);  
+            pst.setString(1, empID);
+            pst.setString(2, description);
+            pst.setString(3, dateOnly);
+            pst.setString(4, timeOnly);
 
             int rowsInserted = pst.executeUpdate();
 
@@ -263,67 +268,86 @@ public class EmployeAssignTask extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Failed to assign task.");
             }
 
-            } catch (SQLException ex) {
-                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
-            } 
-   
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+        }
+
     }//GEN-LAST:event_btnAssignActionPerformed
 
     private void btnSendMailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMailActionPerformed
         // TODO add your handling code here:
         try {
-        Connection con = DatabaseLayer.mycon(); 
-        PreparedStatement pstEmail = null;
-        PreparedStatement pstTask = null;
+            Connection con = DatabaseLayer.mycon();
+            PreparedStatement pstEmail = null;
+            PreparedStatement pstTask = null;
 
-        String empID = txtEmpID.getText();
+            String empID = txtEmpID.getText();
 
-        // Get employee email
-        String getEmailSQL = "SELECT Email FROM employees WHERE employee_id = ?";
-        pstEmail = con.prepareStatement(getEmailSQL);
-        pstEmail.setString(1, empID);
-        ResultSet rsEmail = pstEmail.executeQuery();
+            // Get employee email
+            String getEmailSQL = "SELECT Email FROM employees WHERE employee_id = ?";
+            pstEmail = con.prepareStatement(getEmailSQL);
+            pstEmail.setString(1, empID);
+            ResultSet rsEmail = pstEmail.executeQuery();
 
-        if (rsEmail.next()) {
-            String toEmail = rsEmail.getString("Email");
+            if (rsEmail.next()) {
+                String toEmail = rsEmail.getString("Email");
 
-            // Get latest task for this employee
-            String getTaskSQL = "SELECT task_description, dutyDate, dutyTime FROM employeetasks WHERE employee_id = ? ORDER BY task_id DESC LIMIT 1";
-            pstTask = con.prepareStatement(getTaskSQL);
-            pstTask.setString(1, empID);
-            ResultSet rsTask = pstTask.executeQuery();
+                // Get latest task for this employee
+                String getTaskSQL = "SELECT task_description, dutyDate, dutyTime FROM employeetasks WHERE employee_id = ? ORDER BY task_id DESC LIMIT 1";
+                pstTask = con.prepareStatement(getTaskSQL);
+                pstTask.setString(1, empID);
+                ResultSet rsTask = pstTask.executeQuery();
 
-            if (rsTask.next()) {
-                String description = rsTask.getString("task_description");
-                String dateOnly = rsTask.getString("dutyDate");
-                String timeOnly = rsTask.getString("dutyTime");
+                if (rsTask.next()) {
+                    String description = rsTask.getString("task_description");
+                    String dateOnly = rsTask.getString("dutyDate");
+                    String timeOnly = rsTask.getString("dutyTime");
 
-                // Email content
-                String subject = "📌 New Task Assigned to You";
-                String body = "Dear Employee,\n\n" +
-                              "You have been assigned a new task with the following details:\n\n" +
-                              "📝 Description: " + description + "\n" +
-                              "📅 Date: " + dateOnly + "\n" +
-                              "⏰ Time: " + timeOnly + "\n\n" +
-                              "Please make sure to complete it on time.\n\n" +
-                              "Best Regards,\n" +
-                              "Panorama Hotel Management";
+                    // Email content
+                    String subject = "📌 New Task Assigned to You";
 
-                // Send email
-                Send_Email_Handler.sendEmail(toEmail, subject, body);
+                    String body
+                            = "<html>"
+                            + "<body style='font-family: Arial, sans-serif; background-color:#f4f8fb; margin:0; padding:0;'>"
+                            + "<div style='width:600px; margin:auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);'>"
+                            + "<div style='background-color:#0d6efd; color:white; padding:20px; text-align:center; font-size:22px; font-weight:bold;'>"
+                            + "New Task Assigned"
+                            + "</div>"
+                            + "<div style='padding:20px; color:#333;'>"
+                            + "<p>Dear Employee,</p>"
+                            + "<p>You have been assigned a new task. Please find the details below:</p>"
+                            + "<div style='background-color:#f1f6ff; padding:15px; border-radius:6px; margin-top:15px;'>"
+                            + "<p><b>Description:</b> " + description + "</p>"
+                            + "<p><b>Date:</b> " + dateOnly + "</p>"
+                            + "<p><b>Time:</b> " + timeOnly + "</p>"
+                            + "</div>"
+                            + "<p style='margin-top:20px;'>"
+                            + "Please ensure that the task is completed on time."
+                            + "</p>"
+                            + "<p>Best Regards,<br>"
+                            + "<b>Srinill Beach Resort Management</b></p>"
+                            + "</div>"
+                            + "<div style='text-align:center; padding:15px; font-size:12px; color:#888;'>"
+                            + "© 2026 Srinill Beach Resort. All rights reserved."
+                            + "</div>"
+                            + "</div>"
+                            + "</body>"
+                            + "</html>";
+
+                    Send_Email_Handler.sendEmail(toEmail, subject, body);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No task found for the selected employee.");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "No task found for the selected employee.");
+                JOptionPane.showMessageDialog(null, "Employee email not found.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Employee email not found.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage());
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage());
-    }
-    
     }//GEN-LAST:event_btnSendMailActionPerformed
 
 
@@ -346,5 +370,4 @@ public class EmployeAssignTask extends javax.swing.JPanel {
     private javax.swing.JTextField txtJobROle;
     // End of variables declaration//GEN-END:variables
 
-    
 }

@@ -1,6 +1,6 @@
-
 package GUI;
 
+import Control.Send_Email_Handler;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,31 +21,35 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class Reservation extends javax.swing.JPanel {
-    private int customerID; 
+
+    private int customerID;
     private String customerEmail;
     private String customerName;
     private boolean confirmed = false;
     private int roomNo;
     private LocalDate day;
     private RoomRes parentCalendar;
-    
+
     public boolean isReservationConfirmed() {
         return confirmed;
     }
 
     public Reservation(int customerID) {
         this.customerID = customerID;
-}
+    }
+
     public int getCustomerID() {
         return customerID;
     }
+
     public String getCustomerEmail() {
         return customerEmail;
     }
+
     public String getCustomerName() {
         return customerName;
     }
-    
+
     public Reservation(int roomNo, RoomRes parent) {
         initComponents();
 
@@ -99,29 +103,28 @@ public class Reservation extends javax.swing.JPanel {
     }
 
     private void setupEventListeners() {
-    jComboBox2.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
-            String selectedType = jComboBox2.getSelectedItem().toString();
+        jComboBox2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                String selectedType = jComboBox2.getSelectedItem().toString();
 
-            if (selectedType.equals("Room")) {
-                jLabel2.setText("Room No:");
-                loadRoomNumbers();
-            } else if (selectedType.equals("Hall")) {
-                jLabel2.setText("Hall Name:");
-                loadHallNames();
+                if (selectedType.equals("Room")) {
+                    jLabel2.setText("Room No:");
+                    loadRoomNumbers();
+                } else if (selectedType.equals("Hall")) {
+                    jLabel2.setText("Hall Name:");
+                    loadHallNames();
+                }
+
             }
- 
-        }
-    });
+        });
 
-    jComboBox3.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
-            fetchPrice(); // Update price when Room/Hall changes
-        }
-    });
-}
+        jComboBox3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                fetchPrice(); // Update price when Room/Hall changes
+            }
+        });
+    }
 
-    
     private void loadRoomNumbers() {
         jComboBox3.removeAllItems();
         jComboBox3.addItem("-- Select --");
@@ -130,152 +133,161 @@ public class Reservation extends javax.swing.JPanel {
         Connection con = DatabaseLayer.mycon();
         String sql = "SELECT room_no FROM rooms WHERE availability = 'Available' order by room_no";
         try (PreparedStatement pst = con.prepareStatement(sql);
-         ResultSet rs = pst.executeQuery()) {
+                ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
                 jComboBox3.addItem(rs.getString("room_no"));
             }
         } catch (SQLException e) {
-        e.printStackTrace();
+            e.printStackTrace();
+        }
     }
-}
 
     private void loadHallNames() {
         jComboBox3.removeAllItems();
         jComboBox3.addItem("-- Select --");
-        
+
         Connection con = DatabaseLayer.mycon();
         String sql = "SELECT hall_name FROM halls";
         try (PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery()) {
-        while (rs.next()) {
-            jComboBox3.addItem(rs.getString("hall_name"));
+                ResultSet rs = pst.executeQuery()) {
+            while (rs.next()) {
+                jComboBox3.addItem(rs.getString("hall_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-}
 
-    public void fetchPrice(){
-        if (jComboBox3.getSelectedItem() == null || jComboBox3.getSelectedItem().toString().equals("-- Select --") || jComboBox2.getSelectedItem().toString().equals("-") ) {
-        txtPrice.setText(""); 
-        return;
-    }
+    public void fetchPrice() {
+        if (jComboBox3.getSelectedItem() == null || jComboBox3.getSelectedItem().toString().equals("-- Select --") || jComboBox2.getSelectedItem().toString().equals("-")) {
+            txtPrice.setText("");
+            return;
+        }
         Connection con = DatabaseLayer.mycon();
         PreparedStatement pst = null;
-        ResultSet rs=null;
-        
+        ResultSet rs = null;
+
         try {
-        String selectedType = jComboBox2.getSelectedItem().toString();
-        String selectedRoomID = jComboBox3.getSelectedItem().toString();
+            String selectedType = jComboBox2.getSelectedItem().toString();
+            String selectedRoomID = jComboBox3.getSelectedItem().toString();
 
-        if (selectedType.equals("Room")) {
-            String sql = "SELECT price FROM rooms WHERE room_no = ?";
-            pst = con.prepareStatement(sql);
-            pst.setString(1, selectedRoomID);
-            rs = pst.executeQuery();
+            if (selectedType.equals("Room")) {
+                String sql = "SELECT price FROM rooms WHERE room_no = ?";
+                pst = con.prepareStatement(sql);
+                pst.setString(1, selectedRoomID);
+                rs = pst.executeQuery();
 
-            if (rs.next()) {
-                String price = rs.getString("price");
-                txtPrice.setText(price);
-            } else {
-                txtPrice.setText("N/A");
-                JOptionPane.showMessageDialog(this, "Room not found!");
+                if (rs.next()) {
+                    String price = rs.getString("price");
+                    txtPrice.setText(price);
+                } else {
+                    txtPrice.setText("N/A");
+                    JOptionPane.showMessageDialog(this, "Room not found!");
+                }
+            } else if (selectedType.equals("Hall")) {
+                jLabel2.setText("Hall Name :");
+                String sql1 = "SELECT price FROM halls WHERE hall_name = ?";
+                pst = con.prepareStatement(sql1);
+                pst.setString(1, selectedRoomID); //selectedRoomID = hall Name
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    String price = rs.getString("price");
+                    txtPrice.setText(price);
+                } else {
+                    txtPrice.setText("N/A");
+                    JOptionPane.showMessageDialog(this, "Hall not found!");
+                }
             }
-        }else if(selectedType.equals("Hall")){
-            jLabel2.setText("Hall Name :");
-            String sql1="SELECT price FROM halls WHERE hall_name = ?";
-            pst = con.prepareStatement(sql1);
-            pst.setString(1, selectedRoomID); //selectedRoomID = hall Name
-            rs = pst.executeQuery();
-
-            if (rs.next()) {
-                String price = rs.getString("price");
-                txtPrice.setText(price);
-            } else {
-                txtPrice.setText("N/A");
-                JOptionPane.showMessageDialog(this, "Hall not found!");
-            }
-        }
-    } catch (SQLException ex) {
-        Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (pst != null) pst.close();
-            if (con != null) con.close();
         } catch (SQLException ex) {
             Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
     }
-        
-        
-    }
-    
+
     private void checkCustomerByNIC() {
-    String nic = txtNIC.getText().trim();
+        String nic = txtNIC.getText().trim();
 
-    if (nic.length() < 10) {
-        // Optional: only search when NIC is at least 5 characters
-        return;
-    }
+        if (nic.length() < 10) {
+            // Optional: only search when NIC is at least 5 characters
+            return;
+        }
 
-    Connection con = null;
-    PreparedStatement pst = null;
-    ResultSet rs = null;
+        Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-    try {
-        con = DatabaseLayer.mycon();
-        String sql = "SELECT * FROM customers WHERE NIC = ?";
-        pst = con.prepareStatement(sql);
-        pst.setString(1, nic);
-        rs = pst.executeQuery();
+        try {
+            con = DatabaseLayer.mycon();
+            String sql = "SELECT * FROM customers WHERE NIC = ?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, nic);
+            rs = pst.executeQuery();
 
-        if (rs.next()) {
-            // Existing customer found
-            txtCustName.setText(rs.getString("name"));
-            txtCustEmail.setText(rs.getString("email"));
-            txtCustPhone.setText(rs.getString("phone"));
-            txtCustAddress.setText(rs.getString("address"));
-            String gender = rs.getString("gender");
-            if ("Male".equalsIgnoreCase(gender)) {
-                radioButtonMale.setSelected(true);
+            if (rs.next()) {
+                // Existing customer found
+                txtCustName.setText(rs.getString("name"));
+                txtCustEmail.setText(rs.getString("email"));
+                txtCustPhone.setText(rs.getString("phone"));
+                txtCustAddress.setText(rs.getString("address"));
+                String gender = rs.getString("gender");
+                if ("Male".equalsIgnoreCase(gender)) {
+                    radioButtonMale.setSelected(true);
+                } else {
+                    radioButtonFemale.setSelected(true);
+                }
+
+                lblCheck.setText("Customer already exists.");
+                customerID = rs.getInt("customer_id");
+                customerEmail = rs.getString("email");
+                customerName = rs.getString("name");
+
+                btnUpdate.setEnabled(true);
+
             } else {
-                radioButtonFemale.setSelected(true);
+                // Not found – clear fields
+                txtCustName.setText("");
+                txtCustEmail.setText("");
+                txtCustPhone.setText("");
+                txtCustAddress.setText("");
+                radioButtonMale.setSelected(false);
+                radioButtonFemale.setSelected(false);
+                lblCheck.setText("New customer.");
+                btnUpdate.setEnabled(false);
             }
 
-            lblCheck.setText("Customer already exists.");
-            customerID = rs.getInt("customer_id");
-            customerEmail = rs.getString("email");
-            customerName = rs.getString("name");
-            
-            btnUpdate.setEnabled(true);  
-
-        } else {
-            // Not found – clear fields
-            txtCustName.setText("");
-            txtCustEmail.setText("");
-            txtCustPhone.setText("");
-            txtCustAddress.setText("");
-            radioButtonMale.setSelected(false);
-            radioButtonFemale.setSelected(false);
-            lblCheck.setText("New customer.");
-            btnUpdate.setEnabled(false);
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error checking NIC: " + e.getMessage());
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (pst != null) pst.close();
-            if (con != null) con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error checking NIC: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
-
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -750,7 +762,7 @@ public class Reservation extends javax.swing.JPanel {
         String customerPhone = txtCustPhone.getText().trim();
         String customerAddress = txtCustAddress.getText().trim();
         String customerGender = radioButtonMale.isSelected() ? "Male" : "Female";
-        
+
         if (customerName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Customer name cannot be empty.");
             return;
@@ -767,7 +779,7 @@ public class Reservation extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Address cannot be empty.");
             return;
         }
-        
+
         this.customerEmail = customerEmail;
         this.customerName = customerName;
 
@@ -779,17 +791,16 @@ public class Reservation extends javax.swing.JPanel {
             rs = pst.executeQuery();
 
             if (rs.next()) {
-            // Customer already exists
+                // Customer already exists
                 int existingCustomerID = rs.getInt("customer_id");
                 this.customerID = existingCustomerID;
-                
+
                 lblCheck.setText("Customer Already Registered");
 
 //                JOptionPane.showMessageDialog(this, "Customer already exists. Customer ID: " + existingCustomerID);
 //                Customer_Add_Popup1 addCustomer = new Customer_Add_Popup1(new Reservation(customerID));
 //       
 //                addCustomer.setVisible(true);
-
                 // Switch to the second tab
                 jTabbedPane1.setSelectedIndex(1);
             } else {
@@ -810,14 +821,14 @@ public class Reservation extends javax.swing.JPanel {
                 rs = pst.getGeneratedKeys();
 
                 if (rowsInserted > 0 && rs.next()) {
-                int newCustomerID = rs.getInt(1);
-                this.customerID = newCustomerID;
+                    int newCustomerID = rs.getInt(1);
+                    this.customerID = newCustomerID;
 
-                JOptionPane.showMessageDialog(this, 
-                    "Customer ID: " + newCustomerID + " Saved Successfully!");
+                    JOptionPane.showMessageDialog(this,
+                            "Customer ID: " + newCustomerID + " Saved Successfully!");
 
-                // Switch to the second tab
-                jTabbedPane1.setSelectedIndex(1);
+                    // Switch to the second tab
+                    jTabbedPane1.setSelectedIndex(1);
                 } else {
                     JOptionPane.showMessageDialog(this, "Failed to Save Data!");
                 }
@@ -827,14 +838,20 @@ public class Reservation extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (pst != null) pst.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    
+
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -843,154 +860,171 @@ public class Reservation extends javax.swing.JPanel {
         txtCustEmail.setText("");
         txtCustPhone.setText("");
         txtCustAddress.setText("");
-        radioButtonMale=null;
+        radioButtonMale = null;
         txtNIC.setText("");
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         // TODO add your handling code here:
-        
-    Connection con = DatabaseLayer.mycon();
-    PreparedStatement pst = null;
-    ResultSet rs=null;
-    
-    String reserType = jComboBox2.getSelectedItem().toString();
-    String id_No = jComboBox3.getSelectedItem().toString();
-    Date checkInDateValue = checkInDate.getDate();
-    Date checkOutDateValue = checkOutDate.getDate();
-    String price = txtPrice.getText();
-    String status = jComboBoxStatus.getSelectedItem().toString();
-    LocalDate currentDate = LocalDate.now();
-    
-    // === Validation Start ===
-    if (reserType == null || reserType.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please select reservation type.");
-        return;
-    }
-    if (id_No == null || id_No.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please select a Room/Hall ID.");
-        return;
-    }
-    if (checkInDateValue == null) {
-        JOptionPane.showMessageDialog(this, "Please select a Check-in Date.");
-        return;
-    }
-    if (reserType.equals("Room") && checkOutDateValue == null) {
-        JOptionPane.showMessageDialog(this, "Please select a Check-out Date.");
-        return;
-    }
-    if (price.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please enter the price.");
-        return;
-    }
-    try {
-        Double.parseDouble(price); 
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Price must be a valid number.");
-        return;
-    }
-    if (reserType.equals("Room") && checkInDateValue.after(checkOutDateValue)) {
-        JOptionPane.showMessageDialog(this, "Check-out date must be after Check-in date.");
-        return;
-    }
-    // === Validation End ===
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    String checkInDateString = sdf.format(checkInDateValue);
-    String checkOutDateString = sdf.format(checkOutDateValue);
+        Connection con = DatabaseLayer.mycon();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-    if (reserType.equals("Room")) {
-        try {
-            
-            String sql = "INSERT INTO roomreservation (customer_id, room_id, reserve_Date, checkInDate,checkOutDate, price, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            
-            pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            pst.setInt(1, customerID); 
-            pst.setString(2, id_No);  
-            pst.setString(3, currentDate.toString());  
-            pst.setString(4, checkInDateString);  
-            pst.setString(5, checkOutDateString);
-            pst.setString(6, price); 
-            pst.setString(7, status); 
-            
-            int rowsInserted = pst.executeUpdate();
-            
-            if (rowsInserted > 0) {
-                rs = pst.getGeneratedKeys();
-                int reservID=0;
-                if(rs.next()){
-                    reservID=rs.getInt(1);
-                }
-                JOptionPane.showMessageDialog(this, "Reservation ID: "+reservID+"Room ID: "+id_No+" successfully reserved for the "+customerName);
-                parentCalendar.refreshCalendar();
-               
-                // After successful reservation, update room availability to 'Not Available'
-                String updateAvailabilitySQL = "UPDATE rooms SET availability = 'Ocupied' WHERE room_no = ?";
-                pst = con.prepareStatement(updateAvailabilitySQL);
-                pst.setString(1, id_No);
-                int rowsUpdated = pst.executeUpdate();
-                
-                // Send confirmation email
-                try{
-                    String subject = "Srinill hotel Room Reservation Complete!!!";
-                    String body = "Dear " + customerName + ",\n\nYour room reservation is successful!\n"
-                +"Reservation ID is: "+reservID
-                + "\nYour Room ID is: " +id_No
-                +"\nReserve Date: "+currentDate.toString()
-                +"\nCheck IN Date: "+checkInDateString
-                +"\nThanks for choosing US!!!"
-                +" \n\nRegards,\nAdmin";
-                Send_Email_Handler.sendEmail(customerEmail, subject, body);
-                }catch(Exception e){
-                    JOptionPane.showMessageDialog(this, "Error sending Email!!!");
-                }
- 
-                txtCustName.setText("");
-                txtCustEmail.setText("");
-                txtCustPhone.setText("");
-                txtCustAddress.setText("");
-                txtNIC.setText("");
-                jTabbedPane1.setSelectedIndex(0);
-               
-                
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to Save Data!");
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        String reserType = jComboBox2.getSelectedItem().toString();
+        String id_No = jComboBox3.getSelectedItem().toString();
+        Date checkInDateValue = checkInDate.getDate();
+        Date checkOutDateValue = checkOutDate.getDate();
+        String price = txtPrice.getText();
+        String status = jComboBoxStatus.getSelectedItem().toString();
+        LocalDate currentDate = LocalDate.now();
+
+        // === Validation Start ===
+        if (reserType == null || reserType.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select reservation type.");
+            return;
         }
-        
-    } else {
-        try {
-            // Corrected SQL statement
-            String sql = "INSERT INTO hallreservation (customer_id, hallName, reserve_Date, checkInDate, price, status) VALUES (?, ?, ?, ?, ?, ?)";
-            
-            pst = con.prepareStatement(sql);
-            pst.setInt(1, customerID);  
-            pst.setString(2, id_No); //id_No = Hall Name
-            pst.setString(3, currentDate.toString());  
-            pst.setString(4, checkInDateString);  
-            pst.setString(5, price);  
-            pst.setString(6, status);  
-            
-            int rowsInserted = pst.executeUpdate();
-            
-            if (rowsInserted > 0) {
-                JOptionPane.showMessageDialog(this, "Hall Name " + id_No + " successfully reserved for customer ID " + customerID);
-                String updateAvailabilitySQL = "UPDATE halls SET Availability = 'Reserved' WHERE hallName = ?";
-                pst = con.prepareStatement(updateAvailabilitySQL);
-                pst.setString(1, id_No);
-                HallReservation_Popup1 addHallReserv = new HallReservation_Popup1(new Reservation(customerID));
-                addHallReserv.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to Save Data!");
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+        if (id_No == null || id_No.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a Room/Hall ID.");
+            return;
         }
-     }
+        if (checkInDateValue == null) {
+            JOptionPane.showMessageDialog(this, "Please select a Check-in Date.");
+            return;
+        }
+        if (reserType.equals("Room") && checkOutDateValue == null) {
+            JOptionPane.showMessageDialog(this, "Please select a Check-out Date.");
+            return;
+        }
+        if (price.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter the price.");
+            return;
+        }
+        try {
+            Double.parseDouble(price);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Price must be a valid number.");
+            return;
+        }
+        if (reserType.equals("Room") && checkInDateValue.after(checkOutDateValue)) {
+            JOptionPane.showMessageDialog(this, "Check-out date must be after Check-in date.");
+            return;
+        }
+        // === Validation End ===
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String checkInDateString = sdf.format(checkInDateValue);
+        String checkOutDateString = sdf.format(checkOutDateValue);
+
+        if (reserType.equals("Room")) {
+            try {
+
+                String sql = "INSERT INTO roomreservation (customer_id, room_id, reserve_Date, checkInDate,checkOutDate, price, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+                pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+                pst.setInt(1, customerID);
+                pst.setString(2, id_No);
+                pst.setString(3, currentDate.toString());
+                pst.setString(4, checkInDateString);
+                pst.setString(5, checkOutDateString);
+                pst.setString(6, price);
+                pst.setString(7, status);
+
+                int rowsInserted = pst.executeUpdate();
+
+                if (rowsInserted > 0) {
+                    rs = pst.getGeneratedKeys();
+                    int reservID = 0;
+                    if (rs.next()) {
+                        reservID = rs.getInt(1);
+                    }
+                    JOptionPane.showMessageDialog(this, "Reservation ID: " + reservID + "Room ID: " + id_No + " successfully reserved for the " + customerName);
+                    parentCalendar.refreshCalendar();
+
+                    // After successful reservation, update room availability to 'Not Available'
+                    String updateAvailabilitySQL = "UPDATE rooms SET availability = 'Ocupied' WHERE room_no = ?";
+                    pst = con.prepareStatement(updateAvailabilitySQL);
+                    pst.setString(1, id_No);
+                    int rowsUpdated = pst.executeUpdate();
+
+                    String subject = "Reservation Confirmed | " + reservID;
+
+                    String message
+                            = "<html>"
+                            + "<body style='font-family: Arial, sans-serif; background-color:#f4f8fb; margin:0; padding:0;'>"
+                            + "<div style='width:600px; margin:auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);'>"
+                            + "<div style='background-color:#0d6efd; color:white; padding:20px; text-align:center; font-size:22px; font-weight:bold;'>"
+                            + "Reservation Confirmed"
+                            + "</div>"
+                            + "<div style='padding:20px; color:#333;'>"
+                            + "<p>Dear <b>" + customerName + "</b>,</p>"
+                            + "<p>We are pleased to inform you that your room reservation has been "
+                            + "<span style='color:#0d6efd; font-weight:bold;'>successfully confirmed</span>.</p>"
+                            + "<div style='background-color:#f1f6ff; padding:15px; border-radius:6px; margin-top:15px;'>"
+                            + "<p><b>Reservation ID:</b> " + reservID + "</p>"
+                            + "<p><b>Room ID:</b> " + id_No + "</p>"
+                            + "<p><b>Reservation Date:</b> " + currentDate.toString() + "</p>"
+                            + "<p><b>Check-In Date:</b> " + checkInDateString + "</p>"
+                            + "</div>"
+                            + "<p style='margin-top:20px;'>"
+                            + "Thank you for choosing us. We look forward to welcoming you and ensuring a comfortable stay."
+                            + "</p>"
+                            + "<p>Best Regards,<br><b>Srinill Beach Resort Team</b></p>"
+                            + "</div>"
+                            + "<div style='text-align:center; padding:15px; font-size:12px; color:#888;'>"
+                            + "© 2026 Srinill Beach Resort. All rights reserved."
+                            + "</div>"
+                            + "</div>"
+                            + "</body>"
+                            + "</html>";
+
+                    Send_Email_Handler.sendEmail(customerEmail, subject, message);
+
+                    txtCustName.setText("");
+                    txtCustEmail.setText("");
+                    txtCustPhone.setText("");
+                    txtCustAddress.setText("");
+                    txtNIC.setText("");
+                    jTabbedPane1.setSelectedIndex(0);
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to Save Data!");
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            try {
+                // Corrected SQL statement
+                String sql = "INSERT INTO hallreservation (customer_id, hallName, reserve_Date, checkInDate, price, status) VALUES (?, ?, ?, ?, ?, ?)";
+
+                pst = con.prepareStatement(sql);
+                pst.setInt(1, customerID);
+                pst.setString(2, id_No); //id_No = Hall Name
+                pst.setString(3, currentDate.toString());
+                pst.setString(4, checkInDateString);
+                pst.setString(5, price);
+                pst.setString(6, status);
+
+                int rowsInserted = pst.executeUpdate();
+
+                if (rowsInserted > 0) {
+                    JOptionPane.showMessageDialog(this, "Hall Name " + id_No + " successfully reserved for customer ID " + customerID);
+                    String updateAvailabilitySQL = "UPDATE halls SET Availability = 'Reserved' WHERE hallName = ?";
+                    pst = con.prepareStatement(updateAvailabilitySQL);
+                    pst.setString(1, id_No);
+                    HallReservation_Popup1 addHallReserv = new HallReservation_Popup1(new Reservation(customerID));
+                    addHallReserv.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to Save Data!");
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void radioButtonMaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonMaleActionPerformed
@@ -1000,50 +1034,54 @@ public class Reservation extends javax.swing.JPanel {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         Connection con = null;
-    PreparedStatement pst = null;
+        PreparedStatement pst = null;
 
-    String customerName = txtCustName.getText().trim();
-    String customerEmail = txtCustEmail.getText().trim();
-    String customerPhone = txtCustPhone.getText().trim();
-    String customerAddress = txtCustAddress.getText().trim();
-    String customerGender = radioButtonMale.isSelected() ? "Male" : "Female";
-    String NIC = txtNIC.getText().trim();
+        String customerName = txtCustName.getText().trim();
+        String customerEmail = txtCustEmail.getText().trim();
+        String customerPhone = txtCustPhone.getText().trim();
+        String customerAddress = txtCustAddress.getText().trim();
+        String customerGender = radioButtonMale.isSelected() ? "Male" : "Female";
+        String NIC = txtNIC.getText().trim();
 
-    if (customerID == 0) {
-        JOptionPane.showMessageDialog(this, "No existing customer selected for update.");
-        return;
-    }
-
-    try {
-        con = DatabaseLayer.mycon();
-        String sql = "UPDATE customers SET name = ?, gender = ?, email = ?, phone = ?, address = ? WHERE customer_id = ?";
-        pst = con.prepareStatement(sql);
-        pst.setString(1, customerName);
-        pst.setString(2, customerGender);
-        pst.setString(3, customerEmail);
-        pst.setString(4, customerPhone);
-        pst.setString(5, customerAddress);
-        pst.setInt(6, customerID);
-
-        int updated = pst.executeUpdate();
-        if (updated > 0) {
-            JOptionPane.showMessageDialog(this, "Customer updated successfully!");
-            jTabbedPane1.setSelectedIndex(1);
-            
-        } else {
-            JOptionPane.showMessageDialog(this, "Customer update failed.");
+        if (customerID == 0) {
+            JOptionPane.showMessageDialog(this, "No existing customer selected for update.");
+            return;
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-    } finally {
         try {
-            if (pst != null) pst.close();
-            if (con != null) con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            con = DatabaseLayer.mycon();
+            String sql = "UPDATE customers SET name = ?, gender = ?, email = ?, phone = ?, address = ? WHERE customer_id = ?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, customerName);
+            pst.setString(2, customerGender);
+            pst.setString(3, customerEmail);
+            pst.setString(4, customerPhone);
+            pst.setString(5, customerAddress);
+            pst.setInt(6, customerID);
+
+            int updated = pst.executeUpdate();
+            if (updated > 0) {
+                JOptionPane.showMessageDialog(this, "Customer updated successfully!");
+                jTabbedPane1.setSelectedIndex(1);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Customer update failed.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
-    }
 
     }//GEN-LAST:event_btnUpdateActionPerformed
 

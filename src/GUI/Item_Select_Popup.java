@@ -1,4 +1,6 @@
 package GUI;
+
+import Control.Send_Email_Handler;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -7,7 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 public class Item_Select_Popup extends javax.swing.JFrame {
-    
+
     private Inventory inventory_tb_load;
 
     public Item_Select_Popup(Inventory inventory_tb_load, String itemID) {
@@ -17,12 +19,12 @@ public class Item_Select_Popup extends javax.swing.JFrame {
         btnView(itemID);
         btnEmail.setVisible(false);
     }
-    
+
     public void btnView(String itemID) {
         try {
-            Statement s =  DatabaseLayer.mycon().createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM inventory WHERE itemID = '"+itemID+"'");
-            
+            Statement s = DatabaseLayer.mycon().createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM inventory WHERE itemID = '" + itemID + "'");
+
             if (rs.next()) {
                 lblItemName.setText(rs.getString("itemName"));
                 txtItemID.setText(rs.getString("itemID"));
@@ -30,7 +32,7 @@ public class Item_Select_Popup extends javax.swing.JFrame {
                 ComboCategory.setSelectedItem(rs.getString("itemCategory"));
                 txtQty.setText(rs.getString("qty"));
                 txtDes.setText(rs.getString("description"));
-                
+
                 String supplierName = rs.getString("supplier");
 
                 supLoad(supplierName);
@@ -40,13 +42,13 @@ public class Item_Select_Popup extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     public void supLoad(String selectedSupplier) {
         try {
             DefaultComboBoxModel<String> com = new DefaultComboBoxModel<>();
 
             try (Statement s = DatabaseLayer.mycon().createStatement();
-                 ResultSet rs = s.executeQuery("SELECT supName FROM supplier ORDER BY supName")) {
+                    ResultSet rs = s.executeQuery("SELECT supName FROM supplier ORDER BY supName")) {
 
                 while (rs.next()) {
                     com.addElement(rs.getString("supName"));
@@ -57,18 +59,18 @@ public class Item_Select_Popup extends javax.swing.JFrame {
                 ComboSup.setSelectedItem(selectedSupplier);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
-    
+
     public void sendEmail() {
-        
+
         try {
             String itemID = txtItemID.getText().trim();
             Statement s = DatabaseLayer.mycon().createStatement();
-            ResultSet rs = s.executeQuery("SELECT itemName, qty, supplier FROM inventory WHERE itemID = '"+itemID+"' AND  qty < 10");
-            
+            ResultSet rs = s.executeQuery("SELECT itemName, qty, supplier FROM inventory WHERE itemID = '" + itemID + "' AND  qty < 10");
+
             while (rs.next()) {
                 String itemName = rs.getString("itemName");
                 int qty = rs.getInt("qty");
@@ -79,20 +81,43 @@ public class Item_Select_Popup extends javax.swing.JFrame {
                 if (supplierEmail != null && !supplierEmail.isEmpty()) {
 
                     String subject = "Urgent: Low Stock Alert for " + itemName;
-                    String message = "Dear " + supplier + ",\n\n" +
-                                    "We would like to inform you that our stock level for " + itemName + 
-                                    " is running low ( Current quantity : " + qty + " ).\n\n" +
-                                    "Please arrange to supply new stock at your earliest convenience.\n\n" +
-                                    "Best regards,\n" +
-                                    "Manager,\n" +
-                                    "Panorama Hotel, Kalutara";
+
+                    String message
+                            = "<html>"
+                            + "<body style='font-family: Arial, sans-serif; background-color:#f4f8fb; margin:0; padding:0;'>"
+                            + "<div style='width:600px; margin:auto; background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);'>"
+                            + "<div style='background-color:#0d6efd; color:white; padding:20px; text-align:center; font-size:22px; font-weight:bold;'>"
+                            + "Low Stock Alert"
+                            + "</div>"
+                            + "<div style='padding:20px; color:#333;'>"
+                            + "<p>Dear <b>" + supplier + "</b>,</p>"
+                            + "<p>We would like to inform you that the stock level for "
+                            + "<span style='color:#0d6efd; font-weight:bold;'>" + itemName + "</span> is running low.</p>"
+                            + "<div style='background-color:#f1f6ff; padding:15px; border-radius:6px; margin-top:15px;'>"
+                            + "<p><b>Item Name:</b> " + itemName + "</p>"
+                            + "<p><b>Current Quantity:</b> " + qty + "</p>"
+                            + "</div>"
+                            + "<p style='margin-top:20px;'>"
+                            + "Kindly arrange to supply new stock at your earliest convenience to avoid any disruptions."
+                            + "</p>"
+                            + "<p>Best Regards,<br>"
+                            + "<b>Manager</b><br>"
+                            + "Srinill Beach Resort, Negombo</p>"
+                            + "</div>"
+                            + "<div style='text-align:center; padding:15px; font-size:12px; color:#888;'>"
+                            + "© 2026 Srinill Beach Resort. All rights reserved."
+                            + "</div>"
+                            + "</div>"
+                            + "</body>"
+                            + "</html>";
+
                     Send_Email_Handler.sendEmail(supplierEmail, subject, message);
-                    
+
                 }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error checking low stock items: " + e.getMessage(), 
-                                        "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error checking low stock items: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -366,7 +391,7 @@ public class Item_Select_Popup extends javax.swing.JFrame {
         String supName = (String) ComboSup.getSelectedItem();
         String qty = txtQty.getText().trim();
         String des = txtDes.getText();
-        
+
         int qtys;
         try {
             qtys = Integer.parseInt(qty);
@@ -378,13 +403,13 @@ public class Item_Select_Popup extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Quantity must be a valid number.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String addedDate = formatter.format(new Date());
 
         try {
-            Statement s =  DatabaseLayer.mycon().createStatement();
-            s.executeUpdate("UPDATE inventory SET itemName = '"+itemName+"', qty = '"+qty+"', itemCategory = '"+supCategory+"', supplier = '"+supName+"', description = '"+des+"', UpdatedDate = '"+addedDate+"' WHERE itemID = '"+itemID+"'");
+            Statement s = DatabaseLayer.mycon().createStatement();
+            s.executeUpdate("UPDATE inventory SET itemName = '" + itemName + "', qty = '" + qty + "', itemCategory = '" + supCategory + "', supplier = '" + supName + "', description = '" + des + "', UpdatedDate = '" + addedDate + "' WHERE itemID = '" + itemID + "'");
             inventory_tb_load.tb_load();
             this.dispose();
 
@@ -397,18 +422,18 @@ public class Item_Select_Popup extends javax.swing.JFrame {
     private void btnReset1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReset1ActionPerformed
         // TODO add your handling code here:
         int response = JOptionPane.showConfirmDialog(
-            this, 
-            "Are you sure you want to delete?", 
-            "Confirm Format", // title
-            JOptionPane.YES_NO_OPTION, 
-            JOptionPane.WARNING_MESSAGE
+                this,
+                "Are you sure you want to delete?",
+                "Confirm Format", // title
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (response == JOptionPane.YES_OPTION) {
             String itemID = txtItemID.getText().trim();
             try {
-                Statement s =  DatabaseLayer.mycon().createStatement();
-                s.executeUpdate("DELETE FROM inventory WHERE itemID = '"+itemID+"'");
+                Statement s = DatabaseLayer.mycon().createStatement();
+                s.executeUpdate("DELETE FROM inventory WHERE itemID = '" + itemID + "'");
                 JOptionPane.showMessageDialog(null, "Item Deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 inventory_tb_load.tb_load();
                 this.dispose();
@@ -425,7 +450,7 @@ public class Item_Select_Popup extends javax.swing.JFrame {
         int qty = Integer.parseInt(txtQty.getText());
         qty++;
         txtQty.setText(String.valueOf(qty));
-        
+
         if (qty < 10) {
             btnEmail.setVisible(true);
         } else {
@@ -440,7 +465,7 @@ public class Item_Select_Popup extends javax.swing.JFrame {
             qty--;
         }
         txtQty.setText(String.valueOf(qty));
-        
+
         if (qty < 10) {
             btnEmail.setVisible(true);
         } else {
@@ -453,14 +478,14 @@ public class Item_Select_Popup extends javax.swing.JFrame {
         String itemID = txtItemID.getText().trim();
         String qty = txtQty.getText().trim();
         try {
-            Statement s =  DatabaseLayer.mycon().createStatement();
-            s.executeUpdate("UPDATE inventory SET qty = '"+qty+"' WHERE itemID = '"+itemID+"'");
+            Statement s = DatabaseLayer.mycon().createStatement();
+            s.executeUpdate("UPDATE inventory SET qty = '" + qty + "' WHERE itemID = '" + itemID + "'");
             sendEmail();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-        
+
     }//GEN-LAST:event_btnEmailActionPerformed
 
     private void txtQtyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQtyKeyReleased
@@ -480,7 +505,7 @@ public class Item_Select_Popup extends javax.swing.JFrame {
     public Item_Select_Popup() {
         // Default constructor for safe object creation
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -523,7 +548,7 @@ public class Item_Select_Popup extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Item_Select_Popup(null,null).setVisible(true);
+                new Item_Select_Popup(null, null).setVisible(true);
             }
         });
     }
