@@ -46,7 +46,7 @@ public class Reports_Reservations extends javax.swing.JPanel {
 
         HashMap<Integer, Integer> bookingsPerMonth = new HashMap<>();
 
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/panorama_hotel", "root", "");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/srinill_beach_resort_2", "root", "");
         Statement stmt = conn.createStatement();
 
         /// Get hall bookings grouped by month
@@ -122,7 +122,7 @@ public class Reports_Reservations extends javax.swing.JPanel {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         // DB Connection
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/panorama_hotel", "root", "");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/srinill_beach_resort_2", "root", "");
         Statement stmt = conn.createStatement();
 
         // Get Hall Income
@@ -363,7 +363,7 @@ public class Reports_Reservations extends javax.swing.JPanel {
         // TODO add your handling code here:
         
         try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/panorama_hotel", "root", "");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/srinill_beach_resort_2", "root", "");
 
         int startMonth = jMonthChooser1.getMonth() + 1;
         int endMonth = jMonthChooser2.getMonth() + 1;
