@@ -64,7 +64,7 @@ public class Reservation extends javax.swing.JPanel {
 
         jComboBox2.addItem("-- Select --");
         jComboBox2.addItem("Room");
-        jComboBox2.addItem("Hall");
+        
 
         setupEventListeners();
 
@@ -103,20 +103,20 @@ public class Reservation extends javax.swing.JPanel {
     }
 
     private void setupEventListeners() {
-        jComboBox2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                String selectedType = jComboBox2.getSelectedItem().toString();
-
-                if (selectedType.equals("Room")) {
-                    jLabel2.setText("Room No:");
-                    loadRoomNumbers();
-                } else if (selectedType.equals("Hall")) {
-                    jLabel2.setText("Hall Name:");
-                    loadHallNames();
-                }
-
-            }
-        });
+//        jComboBox2.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent evt) {
+//                String selectedType = jComboBox2.getSelectedItem().toString();
+//
+//                if (selectedType.equals("Room")) {
+//                    jLabel2.setText("Room No:");
+//                    loadRoomNumbers();
+//                } else if (selectedType.equals("Hall")) {
+//                    jLabel2.setText("Hall Name:");
+//                    loadHallNames();
+//                }
+//
+//            }
+//        });
 
         jComboBox3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -142,21 +142,21 @@ public class Reservation extends javax.swing.JPanel {
         }
     }
 
-    private void loadHallNames() {
-        jComboBox3.removeAllItems();
-        jComboBox3.addItem("-- Select --");
-
-        Connection con = DatabaseLayer.mycon();
-        String sql = "SELECT hall_name FROM halls";
-        try (PreparedStatement pst = con.prepareStatement(sql);
-                ResultSet rs = pst.executeQuery()) {
-            while (rs.next()) {
-                jComboBox3.addItem(rs.getString("hall_name"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void loadHallNames() {
+//        jComboBox3.removeAllItems();
+//        jComboBox3.addItem("-- Select --");
+//
+//        Connection con = DatabaseLayer.mycon();
+//        String sql = "SELECT hall_name FROM halls";
+//        try (PreparedStatement pst = con.prepareStatement(sql);
+//                ResultSet rs = pst.executeQuery()) {
+//            while (rs.next()) {
+//                jComboBox3.addItem(rs.getString("hall_name"));
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void fetchPrice() {
         if (jComboBox3.getSelectedItem() == null || jComboBox3.getSelectedItem().toString().equals("-- Select --") || jComboBox2.getSelectedItem().toString().equals("-")) {
@@ -184,21 +184,7 @@ public class Reservation extends javax.swing.JPanel {
                     txtPrice.setText("N/A");
                     JOptionPane.showMessageDialog(this, "Room not found!");
                 }
-            } else if (selectedType.equals("Hall")) {
-                jLabel2.setText("Hall Name :");
-                String sql1 = "SELECT price FROM halls WHERE hall_name = ?";
-                pst = con.prepareStatement(sql1);
-                pst.setString(1, selectedRoomID); //selectedRoomID = hall Name
-                rs = pst.executeQuery();
-
-                if (rs.next()) {
-                    String price = rs.getString("price");
-                    txtPrice.setText(price);
-                } else {
-                    txtPrice.setText("N/A");
-                    JOptionPane.showMessageDialog(this, "Hall not found!");
-                }
-            }
+            } 
         } catch (SQLException ex) {
             Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -995,36 +981,37 @@ public class Reservation extends javax.swing.JPanel {
                 Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } else {
-            try {
-                // Corrected SQL statement
-                String sql = "INSERT INTO hallreservation (customer_id, hallName, reserve_Date, checkInDate, price, status) VALUES (?, ?, ?, ?, ?, ?)";
-
-                pst = con.prepareStatement(sql);
-                pst.setInt(1, customerID);
-                pst.setString(2, id_No); //id_No = Hall Name
-                pst.setString(3, currentDate.toString());
-                pst.setString(4, checkInDateString);
-                pst.setString(5, price);
-                pst.setString(6, status);
-
-                int rowsInserted = pst.executeUpdate();
-
-                if (rowsInserted > 0) {
-                    JOptionPane.showMessageDialog(this, "Hall Name " + id_No + " successfully reserved for customer ID " + customerID);
-                    String updateAvailabilitySQL = "UPDATE halls SET Availability = 'Reserved' WHERE hallName = ?";
-                    pst = con.prepareStatement(updateAvailabilitySQL);
-                    pst.setString(1, id_No);
-                    HallReservation_Popup1 addHallReserv = new HallReservation_Popup1(new Reservation(customerID));
-                    addHallReserv.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Failed to Save Data!");
-                }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        } 
+//        else {
+//            try {
+//                // Corrected SQL statement
+//                String sql = "INSERT INTO hallreservation (customer_id, hallName, reserve_Date, checkInDate, price, status) VALUES (?, ?, ?, ?, ?, ?)";
+//
+//                pst = con.prepareStatement(sql);
+//                pst.setInt(1, customerID);
+//                pst.setString(2, id_No); //id_No = Hall Name
+//                pst.setString(3, currentDate.toString());
+//                pst.setString(4, checkInDateString);
+//                pst.setString(5, price);
+//                pst.setString(6, status);
+//
+//                int rowsInserted = pst.executeUpdate();
+//
+//                if (rowsInserted > 0) {
+//                    JOptionPane.showMessageDialog(this, "Hall Name " + id_No + " successfully reserved for customer ID " + customerID);
+//                    String updateAvailabilitySQL = "UPDATE halls SET Availability = 'Reserved' WHERE hallName = ?";
+//                    pst = con.prepareStatement(updateAvailabilitySQL);
+//                    pst.setString(1, id_No);
+//                    HallReservation_Popup1 addHallReserv = new HallReservation_Popup1(new Reservation(customerID));
+//                    addHallReserv.setVisible(true);
+//                } else {
+//                    JOptionPane.showMessageDialog(this, "Failed to Save Data!");
+//                }
+//
+//            } catch (SQLException ex) {
+//                Logger.getLogger(Reservation.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void radioButtonMaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonMaleActionPerformed

@@ -422,7 +422,7 @@ public class RoomRes extends JPanel {
 
                 JFrame frame = new JFrame("Room Reservation");
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setSize(900, 600);
+                frame.setSize(1149, 591);
                 frame.setLocationRelativeTo(null);
                 frame.add(resPanel);
                 frame.setVisible(true);
