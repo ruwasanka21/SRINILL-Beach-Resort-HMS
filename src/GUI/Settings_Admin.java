@@ -1,31 +1,32 @@
-
 package GUI;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class Settings_Admin extends javax.swing.JPanel {
-
 
     public Settings_Admin() {
         initComponents();
         account_Table_load();
-        doubleClicked();   
+        doubleClicked();
     }
-    
+
     public void account_Table_load() {
         try {
-            DefaultTableModel dt =  (DefaultTableModel) accTable.getModel();
+            DefaultTableModel dt = (DefaultTableModel) accTable.getModel();
             dt.setRowCount(0);
-            
-            Statement s =  DatabaseLayer.mycon().createStatement();
+
+            Statement s = DatabaseLayer.mycon().createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM login_accounts ORDER BY ID");
             int count = 1;
-            
+
             while (rs.next()) {
                 Vector v = new Vector();
                 v.add(String.valueOf(count));
@@ -33,9 +34,9 @@ public class Settings_Admin extends javax.swing.JPanel {
                 v.add(rs.getString(2));
                 v.add(rs.getString(3));
                 v.add(rs.getString(4));
-                
+
                 dt.addRow(v);
-                
+
                 count++;
             }
         } catch (Exception e) {
@@ -43,31 +44,31 @@ public class Settings_Admin extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
+
     public void clear() {
         txtID.setText("");
         txtPassword.setText("");
         txtUsername.setText("");
         ComboType.setSelectedIndex(0);
     }
-    
+
     public void doubleClicked() {
         accTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) { 
+                if (evt.getClickCount() == 2) {
                     int rownumber = accTable.getSelectedRow();
                     if (rownumber != -1) {
                         String ID = accTable.getValueAt(rownumber, 1).toString();
-                        
+
                         //load data to textfield and combobox
                         try {
-                            Statement s =  DatabaseLayer.mycon().createStatement();
-                            ResultSet rs = s.executeQuery("SELECT * FROM login_accounts WHERE ID = '"+ID+"'");
-                            
+                            Statement s = DatabaseLayer.mycon().createStatement();
+                            ResultSet rs = s.executeQuery("SELECT * FROM login_accounts WHERE ID = '" + ID + "'");
+
                             if (rs.next()) {
                                 txtID.setText(rs.getString("ID"));
                                 txtUsername.setText(rs.getString("username"));
-                                txtPassword.setText(rs.getString("password"));
+                                txtPassword.setText("123");
                                 ComboType.setSelectedItem(rs.getString("type"));
                             }
                         } catch (Exception e) {
@@ -79,7 +80,6 @@ public class Settings_Admin extends javax.swing.JPanel {
             }
         });
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -119,18 +119,17 @@ public class Settings_Admin extends javax.swing.JPanel {
         ComboType = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
         jScrollPane1 = new javax.swing.JScrollPane();
         accTable = new javax.swing.JTable();
 
         jPanel7.setBackground(new java.awt.Color(153, 153, 0));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Settings");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -353,7 +352,7 @@ public class Settings_Admin extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 461, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 468, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -399,8 +398,6 @@ public class Settings_Admin extends javax.swing.JPanel {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("Password :");
 
-        txtPassword.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel4.setText("Username :");
@@ -412,6 +409,8 @@ public class Settings_Admin extends javax.swing.JPanel {
         jLabel5.setText("ID :");
 
         txtID.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+
+        txtPassword.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -426,27 +425,29 @@ public class Settings_Admin extends javax.swing.JPanel {
                         .addComponent(ComboType, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(btnSaveAccounts, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnUpdateAccounts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDeleteAccounts, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnSaveAccounts, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnUpdateAccounts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDeleteAccounts, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtPassword))
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -464,10 +465,10 @@ public class Settings_Admin extends javax.swing.JPanel {
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPassword))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveAccounts)
                     .addComponent(btnUpdateAccounts)
@@ -573,8 +574,8 @@ public class Settings_Admin extends javax.swing.JPanel {
         // TODO add your handling code here:
         String ID = txtID.getText().trim();
         try {
-            Statement s =  DatabaseLayer.mycon().createStatement();
-            s.executeUpdate("DELETE FROM login_accounts WHERE ID = '"+ID+"'");
+            Statement s = DatabaseLayer.mycon().createStatement();
+            s.executeUpdate("DELETE FROM login_accounts WHERE ID = '" + ID + "'");
             JOptionPane.showMessageDialog(null, "Acount Deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             account_Table_load();
             clear();
@@ -587,19 +588,52 @@ public class Settings_Admin extends javax.swing.JPanel {
 
     private void btnUpdateAccountsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateAccountsActionPerformed
         // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to update?");
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
         String username = txtUsername.getText().trim();
         String ID = txtID.getText().trim();
         String password = txtPassword.getText().trim();
         String type = (String) ComboType.getSelectedItem();
 
         try {
-            Statement s =  DatabaseLayer.mycon().createStatement();
-            s.executeUpdate("UPDATE login_accounts SET ID = '"+ID+"', username = '"+username+"', password = '"+password+"', type = '"+type+"' WHERE ID = '"+ID+"'");
-            JOptionPane.showMessageDialog(null, "Acount updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            Connection con = DatabaseLayer.mycon();
+
+            // If password field is empty → do NOT update password
+            if (password.isEmpty()) {
+
+                String query = "UPDATE login_accounts SET username = ?, type = ? WHERE ID = ?";
+                PreparedStatement ps = con.prepareStatement(query);
+
+                ps.setString(1, username);
+                ps.setString(2, type);
+                ps.setString(3, ID);
+
+                ps.executeUpdate();
+
+            } else {
+                // 🔐 Hash new password
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+
+                String query = "UPDATE login_accounts SET username = ?, password = ?, type = ? WHERE ID = ?";
+                PreparedStatement ps = con.prepareStatement(query);
+
+                ps.setString(1, username);
+                ps.setString(2, hashedPassword);
+                ps.setString(3, type);
+                ps.setString(4, ID);
+
+                ps.executeUpdate();
+            }
+
+            JOptionPane.showMessageDialog(null, "Account updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
             account_Table_load();
             clear();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
@@ -613,10 +647,23 @@ public class Settings_Admin extends javax.swing.JPanel {
         String type = (String) ComboType.getSelectedItem();
 
         try {
-            Statement s =  DatabaseLayer.mycon().createStatement();
-            s.executeUpdate("INSERT INTO login_accounts (ID, type, username, password) VALUES ('"+ID+"', '"+type+"', '"+username+"', '"+password+"')");
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+
+            String query = "INSERT INTO login_accounts (ID, type, username, password) VALUES (?, ?, ?, ?)";
+
+            PreparedStatement ps = DatabaseLayer.mycon().prepareStatement(query);
+            ps.setString(1, ID);
+            ps.setString(2, type);
+            ps.setString(3, username);
+            ps.setString(4, hashedPassword);
+
+            ps.executeUpdate();
+
             account_Table_load();
             clear();
+
+            JOptionPane.showMessageDialog(null, "Account Created Successfully!");
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -634,11 +681,11 @@ public class Settings_Admin extends javax.swing.JPanel {
     private void btnFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormatActionPerformed
         // TODO add your handling code here:
         int response = JOptionPane.showConfirmDialog(
-            this, 
-            "Are you sure you want to format?", 
-            "Confirm Format", // title
-            JOptionPane.YES_NO_OPTION, 
-            JOptionPane.WARNING_MESSAGE
+                this,
+                "Are you sure you want to format?",
+                "Confirm Format", // title
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (response == JOptionPane.YES_OPTION) {
@@ -688,7 +735,7 @@ public class Settings_Admin extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtID;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

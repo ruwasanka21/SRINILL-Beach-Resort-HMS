@@ -1,4 +1,3 @@
-
 package GUI;
 
 import java.awt.Color;
@@ -12,12 +11,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import org.mindrot.jbcrypt.BCrypt;
 
-public class Login_Admin extends javax.swing.JFrame implements Runnable{
-    
+public class Login_Admin extends javax.swing.JFrame implements Runnable {
+
     private boolean loginSuccessful = false;
     private Home closehome;
-    
+
     public Login_Admin(Home closehome) {
         this.closehome = closehome;
         initComponents();
@@ -37,8 +37,8 @@ public class Login_Admin extends javax.swing.JFrame implements Runnable{
                     btnLogin.doClick();
                 }
             }
-        }); 
-        
+        });
+
     }
 
     @Override
@@ -181,33 +181,55 @@ public class Login_Admin extends javax.swing.JFrame implements Runnable{
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
+        String passwor = "123"; // your first password
+        String hashed = BCrypt.hashpw(passwor, BCrypt.gensalt(12));
+
+        System.out.println(hashed);
+
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter username and password");
+            return;
+        }
 
         try {
-            Statement s = DatabaseLayer.mycon().createStatement();
-            String query = "SELECT username, password FROM login_accounts WHERE type = ? AND username = ? AND password = ?";
+            String query = "SELECT password FROM login_accounts WHERE type = ? AND username = ?";
             PreparedStatement pst = DatabaseLayer.mycon().prepareStatement(query);
+
             pst.setString(1, "Admin");
             pst.setString(2, username);
-            pst.setString(3, password);
 
             ResultSet rs = pst.executeQuery();
 
-            if (rs.next()) { 
-                loginSuccessful = true;
-                
-                Thread t = new Thread(this);
-                t.start();
-                
-                btnLogin.setEnabled(false);
-                btnReset.setEnabled(false);
-                txtUsername.setEnabled(false);
-                txtPassword.setEnabled(false);
+            if (rs.next()) {
+
+                String storedHash = rs.getString("password");
+
+                // 🔐 Compare hashed password
+                if (BCrypt.checkpw(password, storedHash)) {
+
+                    loginSuccessful = true;
+
+                    Thread t = new Thread(this);
+                    t.start();
+
+                    btnLogin.setEnabled(false);
+                    btnReset.setEnabled(false);
+                    txtUsername.setEnabled(false);
+                    txtPassword.setEnabled(false);
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid password!", "Login Error", JOptionPane.ERROR_MESSAGE);
+                    txtPassword.requestFocusInWindow();
+                }
+
             } else {
-                JOptionPane.showMessageDialog(this, "Invalid username or password or Type", "Login Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Invalid username or type!", "Login Error", JOptionPane.ERROR_MESSAGE);
                 txtUsername.requestFocusInWindow();
             }
+
             rs.close();
             pst.close();
 
