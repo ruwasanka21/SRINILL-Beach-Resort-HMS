@@ -588,7 +588,7 @@ public class Events extends javax.swing.JPanel {
 
     private void btnaddEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddEventActionPerformed
         // TODO add your handling code here:
-        AddEvent event = new AddEvent();
+        AddeventNew event = new AddeventNew();
         event.setLocationRelativeTo(null);
         event.setVisible(true);
 
