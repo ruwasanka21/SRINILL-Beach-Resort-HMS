@@ -122,7 +122,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/GUI/img/newstock.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="New Stock"/>
+                <Property name="text" type="java.lang.String" value="GRN"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddItem1ActionPerformed"/>
@@ -136,7 +136,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/GUI/img/purchase2.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Stock Entry"/>
+                <Property name="text" type="java.lang.String" value="GRN History"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStockEntryActionPerformed"/>

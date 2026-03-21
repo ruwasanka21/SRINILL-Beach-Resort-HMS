@@ -1,14 +1,9 @@
 package GUI;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class Item_Stock_Entry extends javax.swing.JFrame {
@@ -117,7 +112,7 @@ public class Item_Stock_Entry extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 26)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("All Stock Entry Log");
+        jLabel2.setText("GRN History");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

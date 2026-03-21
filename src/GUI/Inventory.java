@@ -164,7 +164,6 @@ public class Inventory extends javax.swing.JPanel {
         jPanel7.setBackground(new java.awt.Color(102, 255, 102));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Inventory Details");
 
         btnAddItem.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -178,7 +177,7 @@ public class Inventory extends javax.swing.JPanel {
 
         btnAddItem1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnAddItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/img/newstock.png"))); // NOI18N
-        btnAddItem1.setText("New Stock");
+        btnAddItem1.setText("GRN");
         btnAddItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddItem1ActionPerformed(evt);
@@ -187,7 +186,7 @@ public class Inventory extends javax.swing.JPanel {
 
         btnStockEntry.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnStockEntry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/img/purchase2.png"))); // NOI18N
-        btnStockEntry.setText("Stock Entry");
+        btnStockEntry.setText("GRN History");
         btnStockEntry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStockEntryActionPerformed(evt);
@@ -611,8 +610,6 @@ public class Inventory extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     public javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblWarning;

@@ -275,7 +275,7 @@ public class Item_New_Stock_Popup extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 22)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("New Stock");
+        jLabel2.setText("Good Receive Note (GRN)");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
