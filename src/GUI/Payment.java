@@ -1,8 +1,6 @@
-
 package GUI;
 
-import java.awt.Dimension;
-import java.awt.print.PrinterException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,319 +8,390 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
 public class Payment extends javax.swing.JPanel {
-    
-    
-     private String checking_id;
-     private String roomNO;
-     private String checkInDate;
-     private String checkOutDate;
-     private double totalPrice;
-     private int reservationId;
-     private double updatedPrice;
-    
+
+    private String checking_id;
+    private String roomNO;
+    private String checkInDate;
+    private String checkOutDate;
+    private double totalPrice;
+    private int reservationId;
+    private double updatedPrice;
+
     public Payment(String checking_id) {
         initComponents();
         generateNextInvoiceNumber();
         this.checking_id = checking_id;
         loadCustomerReservationDetails(checking_id);
         calculateReservationPrice(roomNO, checkInDate, checkOutDate);
-        
-        
+
         txtDiscount.getDocument().addDocumentListener(new DocumentListener() {
-        public void insertUpdate(DocumentEvent e) { calculateOnTheFly(); }
-        public void removeUpdate(DocumentEvent e) { calculateOnTheFly(); }
-        public void changedUpdate(DocumentEvent e) { calculateOnTheFly(); }
-    });
-        
+            public void insertUpdate(DocumentEvent e) {
+                calculateOnTheFly();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                calculateOnTheFly();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                calculateOnTheFly();
+            }
+        });
+
         txtPaid.getDocument().addDocumentListener(new DocumentListener() {
-        public void insertUpdate(DocumentEvent e) { calculateOnTheFly(); }
-        public void removeUpdate(DocumentEvent e) { calculateOnTheFly(); }
-        public void changedUpdate(DocumentEvent e) { calculateOnTheFly(); }
-    });
+            public void insertUpdate(DocumentEvent e) {
+                calculateOnTheFly();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                calculateOnTheFly();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                calculateOnTheFly();
+            }
+        });
 
     }
-    
+
     private void loadCustomerReservationDetails(String checking_id) {
-    Connection con = DatabaseLayer.mycon();
-    PreparedStatement pst = null;
-    ResultSet rs = null;
+        Connection con = DatabaseLayer.mycon();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-    try {
-        
-        String sql = "SELECT * FROM roomcheckin WHERE checkIn_id = ?";
-        pst = con.prepareStatement(sql);
-        pst.setString(1, checking_id);
-        rs = pst.executeQuery();
-
-        if (rs.next()) {
-            txtCustomerName.setText(rs.getString("customerName"));
-            String customerIdStr = rs.getString("customer_id");
-            txtCustomerID.setText(customerIdStr); 
-            reservationId = rs.getInt("reservation_id");
-            txtReservationID.setText(String.valueOf(reservationId));
-            txtReservationDate.setText(rs.getString("reserved_date"));
-            txtRoomID.setText(rs.getString("room_id"));
-            roomNO= txtRoomID.getText();
-            txtCheckInID.setText(rs.getString("checkIn_id"));
-            checkInDate = rs.getString("checkInDate").trim();  
-            txtCheckOutDate.setText(rs.getString("checkOutDate"));
-            checkOutDate = rs.getString("checkOutDate").trim();
-            
-            
-        } else {
-            JOptionPane.showMessageDialog(this, "No record found for check-in ID: " + checking_id);
-        }
-        
-        loadFeaturesByCheckInID(checking_id);
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error retrieving data: " + ex.getMessage());
-    } finally {
         try {
-            if (rs != null) rs.close();
-            if (pst != null) pst.close();
-            if (con != null) con.close();
+
+            String sql = "SELECT * FROM roomcheckin WHERE checkIn_id = ?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, checking_id);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                txtCustomerName.setText(rs.getString("customerName"));
+                String customerIdStr = rs.getString("customer_id");
+                txtCustomerID.setText(customerIdStr);
+                reservationId = rs.getInt("reservation_id");
+                txtReservationID.setText(String.valueOf(reservationId));
+                txtReservationDate.setText(rs.getString("reserved_date"));
+                txtRoomID.setText(rs.getString("room_id"));
+                roomNO = txtRoomID.getText();
+                txtCheckInID.setText(rs.getString("checkIn_id"));
+                checkInDate = rs.getString("checkInDate").trim();
+                txtCheckOutDate.setText(rs.getString("checkOutDate"));
+                checkOutDate = rs.getString("checkOutDate").trim();
+
+            } else {
+                JOptionPane.showMessageDialog(this, "No record found for check-in ID: " + checking_id);
+            }
+
+            loadFeaturesByCheckInID(checking_id);
+
         } catch (SQLException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error retrieving data: " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
-    
+
     private void generateNextInvoiceNumber() {
-    Connection con = DatabaseLayer.mycon();
-    PreparedStatement pst = null;
-    ResultSet rs = null;
+        Connection con = DatabaseLayer.mycon();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-    try {
-        String sql = "SELECT MAX(invoiceNo) AS lastInvoice FROM payments";
-        pst = con.prepareStatement(sql);
-        rs = pst.executeQuery();
+        try {
+            String sql = "SELECT MAX(invoiceNo) AS lastInvoice FROM payments";
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
 
-        String nextInvoiceNo;
-        if (rs.next()) {
-            String lastInvoice = rs.getString("lastInvoice");
-            if (lastInvoice != null && !lastInvoice.isEmpty()) {
-                // Assuming invoice number format is numeric like "1001", "1002"...
-                int newInvoice = Integer.parseInt(lastInvoice) + 1;
-                nextInvoiceNo = String.valueOf(newInvoice);
+            String nextInvoiceNo;
+            if (rs.next()) {
+                String lastInvoice = rs.getString("lastInvoice");
+                if (lastInvoice != null && !lastInvoice.isEmpty()) {
+                    // Assuming invoice number format is numeric like "1001", "1002"...
+                    int newInvoice = Integer.parseInt(lastInvoice) + 1;
+                    nextInvoiceNo = String.valueOf(newInvoice);
+                } else {
+                    nextInvoiceNo = "1001"; // Default starting number
+                }
             } else {
                 nextInvoiceNo = "1001"; // Default starting number
             }
-        } else {
-            nextInvoiceNo = "1001"; // Default starting number
-        }
 
-        txtInvoiceNo.setText(nextInvoiceNo); // Assuming you have a JTextField named txtInvoiceNo
+            txtInvoiceNo.setText(nextInvoiceNo); // Assuming you have a JTextField named txtInvoiceNo
 
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error generating invoice number: " + ex.getMessage());
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (pst != null) pst.close();
-            if (con != null) con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error generating invoice number: " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
-    
+
     private void calculateReservationPrice(String roomID, String checkInDateStr, String checkOutDateStr) {
-    Connection con = DatabaseLayer.mycon();
-    PreparedStatement pst = null;
-    ResultSet rs = null;
+        Connection con = DatabaseLayer.mycon();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-    try {
-        // Step 1: Get room price
-        String sql = "SELECT price FROM rooms WHERE room_no = ?";
-        pst = con.prepareStatement(sql);
-        pst.setString(1, roomID);
-        rs = pst.executeQuery();
-
-        double pricePerNight = 0;
-        if (rs.next()) {
-            pricePerNight = rs.getDouble("price");
-        } else {
-            JOptionPane.showMessageDialog(this, "Room price not found.");
-            return;
-        }
-
-        // Step 2: Parse dates
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        checkInDateStr = checkInDateStr.trim();
-        checkOutDateStr = checkOutDateStr.trim();
-        Date checkInDate = sdf.parse(checkInDateStr);
-        Date checkOutDate = sdf.parse(checkOutDateStr);
-
-        // Step 3: Calculate duration
-        long diffInMillis = checkOutDate.getTime() - checkInDate.getTime();
-        long diffInDays = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
-
-        if (diffInDays == 0) diffInDays = 1; // Minimum charge for 1 night
-
-        // Step 4: Calculate total price
-        totalPrice = diffInDays * pricePerNight;
-        
-        updateReservationPriceBasedOnFeatures(reservationId);
-
-        // Set the total price in the amount textbox
-        txtTotal.setText(String.format("%.2f", updatedPrice));
-
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error calculating reservation price: " + ex.getMessage());
-    } finally {
         try {
-            if (rs != null) rs.close();
-            if (pst != null) pst.close();
-            if (con != null) con.close();
+            // Step 1: Get room price
+            String sql = "SELECT price FROM rooms WHERE room_no = ?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, roomID);
+            rs = pst.executeQuery();
+
+            double pricePerNight = 0;
+            if (rs.next()) {
+                pricePerNight = rs.getDouble("price");
+            } else {
+                JOptionPane.showMessageDialog(this, "Room price not found.");
+                return;
+            }
+
+            // Step 2: Parse dates
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            checkInDateStr = checkInDateStr.trim();
+            checkOutDateStr = checkOutDateStr.trim();
+            Date checkInDate = sdf.parse(checkInDateStr);
+            Date checkOutDate = sdf.parse(checkOutDateStr);
+
+            // Step 3: Calculate duration
+            long diffInMillis = checkOutDate.getTime() - checkInDate.getTime();
+            long diffInDays = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+
+            if (diffInDays == 0) {
+                diffInDays = 1; // Minimum charge for 1 night
+            }
+            // Step 4: Calculate total price
+            totalPrice = diffInDays * pricePerNight;
+
+            updateReservationPriceBasedOnFeatures(reservationId);
+
+            // Set the total price in the amount textbox
+            txtTotal.setText(String.format("%.2f", updatedPrice));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error calculating reservation price: " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void updateReservationPriceBasedOnFeatures(int reservationId) {
+        try {
+            Connection conn = DatabaseLayer.mycon();
+
+            // Step 2: Calculate total selected feature price
+            String featurePriceSql = "SELECT SUM(f.price) AS feature_total "
+                    + "FROM checkin_features cf "
+                    + "JOIN features f ON cf.feature_id = f.featureID "
+                    + "WHERE cf.checkin_id = ?";
+            PreparedStatement featureStmt = conn.prepareStatement(featurePriceSql);
+            featureStmt.setInt(1, Integer.parseInt(checking_id));
+            ResultSet featureRs = featureStmt.executeQuery();
+
+            double featureTotal = 0.0;
+            if (featureRs.next()) {
+                featureTotal = featureRs.getDouble("feature_total");
+            }
+            featureRs.close();
+            featureStmt.close();
+
+            // Step 3: Update reservation price
+            updatedPrice = totalPrice + featureTotal;
+
+            String updateSql = "UPDATE roomreservation SET price = ? WHERE reservation_id = ?";
+            PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setString(1, String.format("%.2f", updatedPrice));
+            updateStmt.setInt(2, reservationId);
+            updateStmt.executeUpdate();
+            updateStmt.close();
+
+            conn.close();
+
+            JOptionPane.showMessageDialog(this, "Reservation price updated successfully to " + updatedPrice);
+
         } catch (SQLException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error updating reservation price: " + ex.getMessage());
         }
     }
-}
-    
-    private void updateReservationPriceBasedOnFeatures(int reservationId) {
-    try {
-        Connection conn = DatabaseLayer.mycon();
 
-        
-        // Step 2: Calculate total selected feature price
-        String featurePriceSql = "SELECT SUM(f.price) AS feature_total " +
-                                 "FROM checkin_features cf " +
-                                 "JOIN features f ON cf.feature_id = f.featureID " +
-                                 "WHERE cf.checkin_id = ?";
-        PreparedStatement featureStmt = conn.prepareStatement(featurePriceSql);
-        featureStmt.setInt(1, Integer.parseInt(checking_id)); 
-        ResultSet featureRs = featureStmt.executeQuery();
-
-        double featureTotal = 0.0;
-        if (featureRs.next()) {
-            featureTotal = featureRs.getDouble("feature_total");
-        }
-        featureRs.close();
-        featureStmt.close();
-
-        // Step 3: Update reservation price
-        updatedPrice = totalPrice + featureTotal;
-        
-        String updateSql = "UPDATE roomreservation SET price = ? WHERE reservation_id = ?";
-        PreparedStatement updateStmt = conn.prepareStatement(updateSql);
-        updateStmt.setString(1, String.format("%.2f", updatedPrice));
-        updateStmt.setInt(2, reservationId);
-        updateStmt.executeUpdate();
-        updateStmt.close();
-
-        conn.close();
-
-        JOptionPane.showMessageDialog(this, "Reservation price updated successfully to " + updatedPrice);
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error updating reservation price: " + ex.getMessage());
-    }
-}
-    
     private void calculateOnTheFly() {
-    try {
-        
-        double total = Double.parseDouble(txtTotal.getText().trim());
-        double discount = txtDiscount.getText().trim().isEmpty() ? 0 : Double.parseDouble(txtDiscount.getText().trim());
-        double paid = txtPaid.getText().trim().isEmpty() ? 0 : Double.parseDouble(txtPaid.getText().trim());
+        try {
+            double total = Double.parseDouble(txtTotal.getText().trim());
+            double discount = txtDiscount.getText().trim().isEmpty() ? 0 : Double.parseDouble(txtDiscount.getText().trim());
+            double paid = txtPaid.getText().trim().isEmpty() ? 0 : Double.parseDouble(txtPaid.getText().trim());
 
-        // Assuming discount is in percentage
-        double discountValue = total * (discount / 100);
+            // Assuming discount is in percentage
+            double discountValue = total * (discount / 100);
 
-        if (discountValue > total) {
+            if (discountValue > total) {
+                txtNetValue.setText("");
+                txtBalance.setText("");
+                txtValue.setText("");
+                return;
+            }
+
+            double netTotal = total - discountValue;
+            double balance = netTotal - paid;
+
+            // Show the calculated values
+            txtValue.setText(String.format("%.2f", discountValue)); // Discount in currency
+            txtNetValue.setText(String.format("%.2f", netTotal));
+            txtBalance.setText(String.format("%.2f", balance));
+
+        } catch (NumberFormatException e) {
             txtNetValue.setText("");
             txtBalance.setText("");
             txtValue.setText("");
-            return;
         }
-
-        double netTotal = total - discountValue;
-        double balance = netTotal - paid;
-
-        // Show the calculated values
-        txtValue.setText(String.format("%.2f", discountValue)); // Discount in currency
-        txtNetValue.setText(String.format("%.2f", netTotal));
-        txtBalance.setText(String.format("%.2f", balance));
-
-    } catch (NumberFormatException e) {
-        txtNetValue.setText("");
-        txtBalance.setText("");
-        txtValue.setText("");
     }
-}
-    
+
     private void loadFeaturesByCheckInID(String checkInId) {
-    Connection con = DatabaseLayer.mycon();
-    PreparedStatement pst = null;
-    ResultSet rs = null;
+        Connection con = DatabaseLayer.mycon();
+        PreparedStatement pst = null;
+        ResultSet rs = null;
 
-    try {
-        String sql = "SELECT f.featureName " +
-                     "FROM checkin_features cf " +
-                     "JOIN features f ON cf.feature_id = f.featureID " +
-                     "WHERE cf.checkin_id = ?";
-        pst = con.prepareStatement(sql);
-        pst.setString(1, checkInId);
-        rs = pst.executeQuery();
-
-        // Example: populate a JTextArea or console output
-        StringBuilder featuresList = new StringBuilder("Features:\n");
-
-        while (rs.next()) {
-            featuresList.append("- ").append(rs.getString("featureName")).append("\n");
-        }
-
-        // Display in a JTextArea or similar
-        txtFeaturesUsed.setText(featuresList.toString()); // assuming you have a JTextArea named txtFeaturesUsed
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error retrieving features: " + ex.getMessage());
-    } finally {
         try {
-            if (rs != null) rs.close();
-            if (pst != null) pst.close();
-            if (con != null) con.close();
+            String sql = "SELECT f.featureName "
+                    + "FROM checkin_features cf "
+                    + "JOIN features f ON cf.feature_id = f.featureID "
+                    + "WHERE cf.checkin_id = ?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, checkInId);
+            rs = pst.executeQuery();
+
+            // Example: populate a JTextArea or console output
+            StringBuilder featuresList = new StringBuilder("Features:\n");
+
+            while (rs.next()) {
+                featuresList.append("- ").append(rs.getString("featureName")).append("\n");
+            }
+
+            // Display in a JTextArea or similar
+            txtFeaturesUsed.setText(featuresList.toString()); // assuming you have a JTextArea named txtFeaturesUsed
+
         } catch (SQLException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error retrieving features: " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-    }
-    
-    
-}
 
-    
-    //Insert Income to Finace table
-    private void insertIncome() { 
-        String itemID = "Reservation ID : "+txtReservationID.getText().trim();
-        String price = txtNetValue.getText().trim();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String addedDate = formatter.format(new Date());
-        String des = "Room Income";
+    }
+
+    private void printInvoice() {
+        HashMap<String, Object> param = new HashMap<>();
+        param.put("invoiceNo", txtInvoiceNo.getText());
+        param.put("checkIn", txtCheckOutDate.getText());
+        param.put("checkOut", txtCheckOutDate.getText());
+        param.put("cusName", txtCustomerName.getText());
+        param.put("roomNo", txtRoomID.getText());
+        param.put("total", txtTotal.getText());
+        param.put("discount", txtDiscount.getText() == null ? BigDecimal.ZERO : txtDiscount.getText());
+        param.put("grandTotal", txtNetValue.getText());
+        param.put("paid", txtPaid.getText());
+
         try {
-            Statement s =  DatabaseLayer.mycon().createStatement();
-            s.executeUpdate("INSERT INTO income (Name, LKR, Des, Date) VALUES ('"+itemID+"', '"+price+"', '"+des+"','"+addedDate+"')");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ReportView r = new ReportView("src\\Reports\\invoice_a5.jasper", param);
+            r.setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Failed to generate report: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
-    
+
+    //Insert Income to Finace table
+    private boolean insertIncome() {
+        String reservationID = txtReservationID.getText();
+        String price = txtNetValue.getText();
+
+        // Check null or empty
+        if (reservationID == null || reservationID.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Reservation ID cannot be empty");
+            return false;
+        }
+
+        if (price == null || price.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Price cannot be empty");
+            return false;
+        }
+
+        String itemID = "Reservation ID : " + reservationID.trim();
+        String addedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String des = "Room Income";
+
+        try {
+            Statement s = DatabaseLayer.mycon().createStatement();
+            s.executeUpdate("INSERT INTO income (Name, LKR, Des, Date) VALUES ('"
+                    + itemID + "', '" + price.trim() + "', '" + des + "','" + addedDate + "')");
+
+            return true; // ✅ success
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return false; // ❌ failed
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -498,6 +567,11 @@ public class Payment extends javax.swing.JPanel {
         btnPrint.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/img/print.png"))); // NOI18N
         btnPrint.setText("Print & Save");
+        btnPrint.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPrintMouseClicked(evt);
+            }
+        });
         btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPrintActionPerformed(evt);
@@ -764,101 +838,132 @@ public class Payment extends javax.swing.JPanel {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        Connection con = DatabaseLayer.mycon(); 
-    PreparedStatement pst = null;
+        Connection con = DatabaseLayer.mycon();
+        PreparedStatement pst = null;
 
-    try {
-        String sql = "INSERT INTO payments (invoiceNo, reservation_id, amount, payment_method, status) " +
-                     "VALUES (?, ?, ?, ?, ?)";
-
-        pst = con.prepareStatement(sql);
-
-        // Collect values from UI
-        String invoiceNo = txtInvoiceNo.getText().trim();
-        String reservationId = txtReservationID.getText().trim();
-        String amount = txtNetValue.getText().trim(); 
-        String paymentMethod = "Cash"; 
-        String status = "Completed"; 
-
-        // Set values in prepared statement
-        pst.setString(1, invoiceNo);
-        pst.setString(2, reservationId);
-        pst.setString(3, amount);
-        pst.setString(4, paymentMethod);
-        pst.setString(5, status);
-        
-        insertIncome();
-        
-        // Execute update
-        int rowsInserted = pst.executeUpdate();
-        if (rowsInserted > 0) {
-            JOptionPane.showMessageDialog(this, "Payment saved successfully!");
-        }
-
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error saving payment: " + ex.getMessage());
-    } finally {
         try {
-            if (pst != null) pst.close();
-            if (con != null) con.close();
+            // Get values
+            String invoiceNo = txtInvoiceNo.getText();
+            String reservationId = txtReservationID.getText();
+            String amount = txtNetValue.getText();
+            String paymentMethod = "Cash";
+            String status = "Completed";
+
+            // ===== VALIDATION =====
+            if (invoiceNo == null || invoiceNo.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Invoice Number cannot be empty");
+                return;
+            }
+
+            if (reservationId == null || reservationId.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Reservation ID cannot be empty");
+                return;
+            }
+
+            if (amount == null || amount.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Amount cannot be empty");
+                return;
+            }
+
+            // Check if amount is a valid number
+            try {
+                Double.parseDouble(amount.trim());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Amount must be a valid number");
+                return;
+            }
+
+            // ===== DATABASE INSERT =====
+            String sql = "INSERT INTO payments (invoiceNo, reservation_id, amount, payment_method, status) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+
+            pst = con.prepareStatement(sql);
+
+            pst.setString(1, invoiceNo.trim());
+            pst.setString(2, reservationId.trim());
+            pst.setString(3, amount.trim());
+            pst.setString(4, paymentMethod);
+            pst.setString(5, status);
+
+            // Call only after validation
+            insertIncome();
+
+            int rowsInserted = pst.executeUpdate();
+            if (rowsInserted > 0) {
+                JOptionPane.showMessageDialog(this, "Payment saved successfully!");
+            }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving payment: " + ex.getMessage());
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-    }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         // TODO add your handling code here:
-        insertIncome();
-        
-        StringBuilder bill = new StringBuilder();
 
-    bill.append("   HOTEL Panorama, Kalutara\n");
-    bill.append("       Payment Receipt\n");
-    bill.append("==============================\n");
-    bill.append("Invoice No : ").append(txtInvoiceNo.getText()).append("\n");
-    bill.append("Reservation ID : ").append(txtReservationID.getText()).append("\n");
-    bill.append("Customer Name : ").append(txtCustomerName.getText()).append("\n");
-    bill.append("Room No : ").append(txtRoomID.getText()).append("\n");
-    bill.append("Check-In : ").append(txtCheckInID.getText()).append("\n");
-    bill.append("Check-Out : ").append(txtCheckOutDate.getText()).append("\n");
-    bill.append("------------------------------\n");
-    
-    
-    String featuresUsed = txtFeaturesUsed.getText();
-    bill.append("Features Used:\n").append(featuresUsed).append("\n");
-    bill.append("------------------------------\n");
+//        StringBuilder bill = new StringBuilder();
+//
+//        bill.append("   HOTEL Panorama, Kalutara\n");
+//        bill.append("       Payment Receipt\n");
+//        bill.append("==============================\n");
+//        bill.append("Invoice No : ").append(txtInvoiceNo.getText()).append("\n");
+//        bill.append("Reservation ID : ").append(txtReservationID.getText()).append("\n");
+//        bill.append("Customer Name : ").append(txtCustomerName.getText()).append("\n");
+//        bill.append("Room No : ").append(txtRoomID.getText()).append("\n");
+//        bill.append("Check-In : ").append(txtCheckInID.getText()).append("\n");
+//        bill.append("Check-Out : ").append(txtCheckOutDate.getText()).append("\n");
+//        bill.append("------------------------------\n");
+//
+//        String featuresUsed = txtFeaturesUsed.getText();
+//        bill.append("Features Used:\n").append(featuresUsed).append("\n");
+//        bill.append("------------------------------\n");
+//
+//        bill.append("Total        : ").append(txtTotal.getText()).append("\n");
+//        bill.append("Discount (%) : ").append(txtDiscount.getText()).append("\n");
+//        bill.append("Discount Amt : ").append(txtValue.getText()).append("\n");
+//        bill.append("Net Total    : ").append(txtNetValue.getText()).append("\n");
+//        bill.append("Paid         : ").append(txtPaid.getText()).append("\n");
+//        bill.append("Balance      : ").append(txtBalance.getText()).append("\n");
+//        bill.append("==============================\n");
+//        bill.append("Thank you! Have a great day!\n");
+//
+//        JTextArea area = new JTextArea(bill.toString());
+//        area.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
+//        area.setEditable(false);
+//
+//        JScrollPane scrollPane = new JScrollPane(area);
+//        scrollPane.setPreferredSize(new Dimension(400, 400));
+//
+//        // Show bill in a dialog with print option
+//        int option = JOptionPane.showConfirmDialog(this, scrollPane, "Print Bill", JOptionPane.OK_CANCEL_OPTION);
+//
+//        if (option == JOptionPane.OK_OPTION) {
+//            try {
+//                area.print();
+//            } catch (PrinterException ex) {
+//                JOptionPane.showMessageDialog(this, "Error printing: " + ex.getMessage());
+//            }
+//        }
 
-
-    
-    bill.append("Total        : ").append(txtTotal.getText()).append("\n");
-    bill.append("Discount (%) : ").append(txtDiscount.getText()).append("\n");
-    bill.append("Discount Amt : ").append(txtValue.getText()).append("\n");
-    bill.append("Net Total    : ").append(txtNetValue.getText()).append("\n");
-    bill.append("Paid         : ").append(txtPaid.getText()).append("\n");
-    bill.append("Balance      : ").append(txtBalance.getText()).append("\n");
-    bill.append("==============================\n");
-    bill.append("Thank you! Have a great day!\n");
-
-    JTextArea area = new JTextArea(bill.toString());
-    area.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
-    area.setEditable(false);
-
-    JScrollPane scrollPane = new JScrollPane(area);
-    scrollPane.setPreferredSize(new Dimension(400, 400));
-
-    // Show bill in a dialog with print option
-    int option = JOptionPane.showConfirmDialog(this, scrollPane, "Print Bill", JOptionPane.OK_CANCEL_OPTION);
-
-    if (option == JOptionPane.OK_OPTION) {
-        try {
-            area.print();
-        } catch (PrinterException ex) {
-            JOptionPane.showMessageDialog(this, "Error printing: " + ex.getMessage());
-        }
-    }
     }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void btnPrintMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrintMouseClicked
+        if (insertIncome()) {
+            printInvoice();
+        }
+    }//GEN-LAST:event_btnPrintMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

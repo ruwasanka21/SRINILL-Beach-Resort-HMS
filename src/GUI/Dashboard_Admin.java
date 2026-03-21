@@ -16,7 +16,7 @@ public class Dashboard_Admin extends javax.swing.JFrame {
         updateDateTime();
         Timer timer = new Timer(1000, e -> updateDateTime());
         timer.start();
-        //btnEmployee.doClick();
+        btnSupplier.doClick();
     }
     private void updateDateTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

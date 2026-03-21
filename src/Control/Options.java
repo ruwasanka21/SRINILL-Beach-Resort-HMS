@@ -12,7 +12,7 @@ package Control;
 public class Options {
     public static int selectedWindowXPosition = 0;
       
-    public static boolean isEnableEmail = true;
+    public static boolean isEnableEmail = false;
     public static String senderEmail = "balancergame@gmail.com";
     public static String senderEmailPassword = "qlms mghn hlin dhiq";
 }
